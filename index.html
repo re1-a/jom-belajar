@@ -1273,7 +1273,13 @@
 
     function speakArabic(textEncoded) {
         try {
-            const text = decodeURIComponent(textEncoded);
+            let text = decodeURIComponent(textEncoded);
+            
+            // Tukar teks Arab supaya TTS sebut tanween (e.g. -tun, -un) sebijik macam silibus sekolah
+            text = text.replace(/ةٌ/g, 'تُنْ');
+            text = text.replace(/\u064c/g, '\u064f\u0646\u0652'); // ٌ -> ُنْ
+            text = text.replace(/نِ$/g, 'نِي'); // اِثْنَانِ -> اِثْنَاني
+            
             window.speechSynthesis.cancel(); // Stop current speaking
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ar'; // Arabic
