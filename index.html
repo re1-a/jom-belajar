@@ -718,7 +718,7 @@
          HEADER
          ============================================ -->
     <header class="app-header" id="app-header">
-        <span class="version-badge">v1.2.0</span>
+        <span class="version-badge">v1.2.1</span>
         <h1>📚 Bijak KAFA — Revision Darjah 2</h1>
         <div class="subtitle">Lughatul Arabiyyah • Selangor • Exam Pertengahan Tahun 2026</div>
     </header>
@@ -1294,9 +1294,14 @@
             // Tukar teks Arab supaya TTS sebut tanween (e.g. -tun, -un) sebijik macam silibus sekolah
             text = text.replace(/ةٌ/g, 'تُنْ');
             text = text.replace(/\u064c/g, '\u064f\u0646\u0652'); // ٌ -> ُنْ
-            text = text.replace(/نِ$/g, 'نِي'); // اِثْنَانِ -> اِثْنَاني
-            text = text.replace(/ةِ$/g, 'تِي'); // كُرَةُ الطَّائِرَةِ -> كُرَةُ الطَّائِرَتِي (ti)
-            text = text.replace(/ةُ$/g, 'تُ');  // السِّبَاحَةُ -> السِّبَاحَتُ (tu)
+            
+            // Tukar Ta Marbutah akhir baris bawah/depan
+            text = text.replace(/ةِ$/g, 'تِي'); // e.g. كُرَةُ الطَّائِرَةِ -> كُرَةُ الطَّائِرَتِي (ti)
+            text = text.replace(/ةُ$/g, 'تُ');  // e.g. السِّبَاحَةُ -> السِّبَاحَتُ (tu)
+            
+            // Paksa sebutan baris depan (dammah) dan baris bawah (kasrah) di akhir huruf biasa
+            text = text.replace(/([^\s])\u064f$/g, '$1\u064f\u0648'); // e.g. أَحْمَرُ -> أَحْمَرُو (u/oo)
+            text = text.replace(/([^\s])\u0650$/g, '$1\u0650\u064a'); // e.g. الْقَدَمِ -> الْقَدَمِي (i/ee)
             
             window.speechSynthesis.cancel(); // Stop current speaking
             const utterance = new SpeechSynthesisUtterance(text);
