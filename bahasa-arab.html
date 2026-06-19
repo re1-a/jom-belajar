@@ -122,6 +122,7 @@
            HEADER
            ============================================ */
         .app-header {
+            position: relative;
             background: var(--bg-header);
             color: white;
             padding: 28px 24px;
@@ -153,6 +154,27 @@
             border-radius: 20px;
             font-size: 11px;
             font-weight: 500;
+        }
+
+        .btn-home-header {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-home-header:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
             border: 1px solid rgba(255, 255, 255, 0.25);
             pointer-events: none;
             backdrop-filter: blur(5px);
@@ -779,7 +801,8 @@
          HEADER
          ============================================ -->
     <header class="app-header" id="app-header">
-        <span class="version-badge">v1.3.0</span>
+        <a href="index.html" class="btn-home-header">🏠 Menu Utama</a>
+        <span class="version-badge">v1.3.1</span>
         <h1>📚 Bijak KAFA — Revision Darjah 2</h1>
         <div class="subtitle">Lughatul Arabiyyah • Selangor • Exam Pertengahan Tahun 2026</div>
     </header>
@@ -788,7 +811,6 @@
          MODE TABS
          ============================================ -->
     <nav class="mode-tabs" id="mode-tabs">
-        <a href="index.html" class="mode-tab" style="text-decoration:none; background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border);">🏠 Menu Utama</a>
         <button class="mode-tab active" data-mode="browse" id="tab-browse">📖 Belajar</button>
         <button class="mode-tab" data-mode="quiz" id="tab-quiz">🧠 Kuiz</button>
         <button class="mode-tab" data-mode="progress" id="tab-progress">📊 Progress</button>
