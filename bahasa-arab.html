@@ -156,6 +156,36 @@
             font-weight: 500;
         }
 
+        .header-tools {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-tool-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            padding: 0;
+        }
+
+        .header-tool-btn:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.1);
+        }
+
         .btn-home-header {
             position: absolute;
             top: 12px;
@@ -684,10 +714,10 @@
            ============================================ */
         @media (max-width: 600px) {
             .app-header h1 { font-size: 22px; }
+            .version-badge { display: none; }
+            .header-tools { right: 16px; }
             .mode-tabs { padding: 10px 12px; gap: 6px; justify-content: center !important; flex-wrap: wrap; }
             .mode-tab { padding: 8px 12px; font-size: 12px; white-space: nowrap; }
-            .hide-mobile { display: none !important; }
-            .btn-icon-only { width: 36px; height: 36px; border-radius: 50% !important; padding: 0 !important; display: flex; align-items: center; justify-content: center; font-size: 16px; }
             .topic-filters { padding: 10px 12px; }
             .content-area { padding: 8px 12px 32px; }
             .vocab-grid { grid-template-columns: 1fr; padding: 12px; }
@@ -804,7 +834,11 @@
          ============================================ -->
     <header class="app-header" id="app-header">
         <a href="index.html" class="btn-home-header">🏠 Menu Utama</a>
-        <span class="version-badge">v1.3.4</span>
+        <div class="header-tools">
+            <button class="header-tool-btn" id="tab-print" onclick="window.print()" title="Print A4">🖨️</button>
+            <button class="header-tool-btn" id="btn-dark-mode" onclick="toggleDarkMode()" title="Gelap/Terang">🌙</button>
+        </div>
+        <span class="version-badge">v1.3.5</span>
         <h1>📚 Bijak KAFA — Revision Darjah 2</h1>
         <div class="subtitle">Lughatul Arabiyyah • Selangor • Exam Pertengahan Tahun 2026</div>
     </header>
@@ -816,8 +850,6 @@
         <button class="mode-tab active" data-mode="browse" id="tab-browse">📖 Belajar</button>
         <button class="mode-tab" data-mode="quiz" id="tab-quiz">🧠 Kuiz</button>
         <button class="mode-tab" data-mode="progress" id="tab-progress">📊 Progress</button>
-        <button class="mode-tab btn-icon-only" data-mode="print" id="tab-print" onclick="window.print()" title="Print A4">🖨️ <span class="hide-mobile">Print A4</span></button>
-        <button class="mode-tab btn-icon-only" id="btn-dark-mode" onclick="toggleDarkMode()" style="background:var(--bg-main); color:var(--text-primary); border:1px solid var(--border);" title="Gelap/Terang">🌙 <span class="hide-mobile">Gelap</span></button>
     </nav>
 
     <!-- ============================================
@@ -1069,11 +1101,11 @@
         if (isDark) {
             document.documentElement.removeAttribute('data-theme');
             localStorage.setItem('kafa_theme', 'light');
-            document.getElementById('btn-dark-mode').innerHTML = '🌙 <span class="hide-mobile">Gelap</span>';
+            document.getElementById('btn-dark-mode').innerHTML = '🌙';
         } else {
             document.documentElement.setAttribute('data-theme', 'dark');
             localStorage.setItem('kafa_theme', 'dark');
-            document.getElementById('btn-dark-mode').innerHTML = '☀️ <span class="hide-mobile">Terang</span>';
+            document.getElementById('btn-dark-mode').innerHTML = '☀️';
         }
     }
 
