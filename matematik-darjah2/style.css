@@ -802,10 +802,8 @@ header p {
 
 /* Top Bar and Dashboard Button */
 .top-bar {
-    position: absolute;
-    top: 20px;
-    right: 20px;
     z-index: 10;
+    position: relative;
 }
 
 .btn-dashboard {
