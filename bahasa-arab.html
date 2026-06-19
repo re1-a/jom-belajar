@@ -802,7 +802,7 @@
          ============================================ -->
     <header class="app-header" id="app-header">
         <a href="index.html" class="btn-home-header">🏠 Menu Utama</a>
-        <span class="version-badge">v1.3.2</span>
+        <span class="version-badge">v1.3.3</span>
         <h1>📚 Bijak KAFA — Revision Darjah 2</h1>
         <div class="subtitle">Lughatul Arabiyyah • Selangor • Exam Pertengahan Tahun 2026</div>
     </header>
@@ -1286,7 +1286,15 @@
                 currentTopic = pill.dataset.topic;
 
                 if (currentMode === 'browse') renderBrowseView();
-                if (currentMode === 'quiz') startQuiz();
+                if (currentMode === 'quiz') {
+                    startQuiz();
+                    setTimeout(() => {
+                        const tabsHeight = document.getElementById('mode-tabs').offsetHeight || 70;
+                        const element = document.getElementById('quiz-view');
+                        const y = element.getBoundingClientRect().top + window.pageYOffset - tabsHeight - 20;
+                        window.scrollTo({top: y, behavior: 'smooth'});
+                    }, 100);
+                }
             });
         });
     }
