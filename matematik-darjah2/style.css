@@ -1,0 +1,923 @@
+:root {
+    --primary-color: #6C5CE7;
+    --secondary-color: #A29BFE;
+    --accent-color: #FD79A8;
+    --success-color: #00B894;
+    --warning-color: #FDCB6E;
+    --danger-color: #FF7675;
+    --bg-color: #F0F3FF;
+    --text-main: #2D3436;
+    --text-light: #636E72;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --exam-color: #6C5CE7;
+    --syllabus-color: #00B894;
+    --title-shadow: white;
+    --card-border: white;
+    --explanation-bg: #FFF9C4;
+    --tab-active-bg: #F0F3FF;
+    --table-header-bg: #f9f9f9;
+    --table-row-even: rgba(0,0,0,0.02);
+    --close-btn-color: #666;
+    --close-btn-hover: #000;
+    --jar-border: rgba(45, 52, 54, 0.8);
+}
+
+[data-theme="dark"] {
+    --primary-color: #A29BFE;
+    --secondary-color: #6C5CE7;
+    --accent-color: #ff9fb4;
+    --success-color: #00d2a6;
+    --warning-color: #ffe090;
+    --danger-color: #ff9b9a;
+    --bg-color: #1e272e;
+    --text-main: #d2dae2;
+    --text-light: #808e9b;
+    --card-bg: #2d3436;
+    --exam-color: #A29BFE;
+    --syllabus-color: #00d2a6;
+    --title-shadow: #1e272e;
+    --card-border: #485460;
+    --explanation-bg: rgba(253, 203, 110, 0.15);
+    --tab-active-bg: rgba(108, 92, 231, 0.2);
+    --table-header-bg: rgba(255, 255, 255, 0.05);
+    --table-row-even: rgba(255, 255, 255, 0.02);
+    --close-btn-color: #b2bec3;
+    --close-btn-hover: #ffffff;
+    --jar-border: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .background-elements {
+    display: none;
+}
+
+[data-theme="dark"] .badge-none {
+    background-color: #353b48;
+    color: #718093;
+    border-color: #718093;
+}
+[data-theme="dark"] .badge-bad { color: #ff7675; }
+[data-theme="dark"] .badge-ok { color: #fdcb6e; }
+[data-theme="dark"] .badge-good { color: #55efc4; }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+h1, h2, h3, .btn-primary {
+    font-family: 'Fredoka One', cursive;
+}
+
+/* Background Decorations */
+.background-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.5;
+    filter: blur(60px);
+}
+
+.circle-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--primary-color);
+    top: -100px;
+    left: -100px;
+    animation: float 8s ease-in-out infinite;
+}
+
+.circle-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--accent-color);
+    bottom: -50px;
+    right: -50px;
+    animation: float 10s ease-in-out infinite reverse;
+}
+
+.circle-3 {
+    width: 200px;
+    height: 200px;
+    background: var(--warning-color);
+    top: 40%;
+    left: 60%;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.1); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    width: 100%;
+    max-width: 960px;
+    padding: 2rem;
+    z-index: 10;
+}
+
+.screen.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    font-size: 2.8rem;
+    color: var(--primary-color);
+    text-shadow: 2px 2px 0px var(--title-shadow), -2px -2px 0px var(--title-shadow), 2px -2px 0px var(--title-shadow), -2px 2px 0px var(--title-shadow);
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    font-weight: 700;
+}
+
+/* Section Headers */
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    margin-bottom: 1.2rem;
+    margin-top: 2rem;
+    font-weight: 900;
+    font-size: 1.3rem;
+    flex-wrap: wrap;
+    font-family: 'Fredoka One', cursive;
+}
+
+.section-header i {
+    font-size: 1.5rem;
+}
+
+.section-header small {
+    display: block;
+    width: 100%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'Nunito', sans-serif;
+    opacity: 0.8;
+    margin-top: -0.3rem;
+}
+
+.exam-section {
+    background: linear-gradient(135deg, rgba(108, 92, 231, 0.15), rgba(162, 155, 254, 0.1));
+    color: var(--exam-color);
+    border: 2px solid rgba(108, 92, 231, 0.2);
+}
+
+.syllabus-section {
+    background: linear-gradient(135deg, rgba(0, 184, 148, 0.15), rgba(85, 239, 196, 0.1));
+    color: var(--syllabus-color);
+    border: 2px solid rgba(0, 184, 148, 0.2);
+}
+
+/* Main Menu Grid */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.menu-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 3px solid var(--card-border);
+    border-radius: 20px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.05);
+}
+
+.menu-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 12px 24px rgba(108, 92, 231, 0.2);
+    border-color: var(--primary-color);
+}
+
+.module-status {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    font-family: 'Nunito', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.badge-none {
+    background-color: #f1f2f6;
+    color: #a4b0be;
+    border: 1px dashed #ced6e0;
+}
+
+.badge-bad {
+    background-color: rgba(255, 118, 117, 0.2);
+    color: #d63031;
+}
+
+.badge-ok {
+    background-color: rgba(253, 203, 110, 0.2);
+    color: #e17055;
+}
+
+.badge-good {
+    background-color: rgba(0, 184, 148, 0.2);
+    color: #00b894;
+}
+
+.syllabus-card:hover {
+    box-shadow: 0 12px 24px rgba(0, 184, 148, 0.2);
+    border-color: var(--syllabus-color);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.syllabus-card .card-icon {
+    color: var(--syllabus-color);
+}
+
+.menu-card:hover .card-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.menu-card h2 {
+    font-size: 1.2rem;
+    color: var(--text-main);
+    margin-bottom: 0.3rem;
+}
+
+.menu-card p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+/* Game Screen */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.btn-back {
+    background: var(--card-bg);
+    border: 2px solid var(--card-border);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    color: var(--text-main);
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.btn-back:hover {
+    transform: translateX(-5px);
+}
+
+.number-card {
+    font-size: 3rem;
+    padding: 1rem 2rem;
+    background: var(--card-bg);
+    border-radius: 15px;
+    border: 3px solid var(--primary-color);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.score-board {
+    background: var(--card-bg);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.game-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 4px solid var(--card-bg);
+    border-radius: 30px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    position: relative;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+#game-header h2 {
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    margin-bottom: 0.3rem;
+}
+
+#game-instruction {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+.game-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Dynamic Game Elements */
+.question-text {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--text-main);
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+}
+
+.options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.option-btn {
+    background: var(--card-bg);
+    border: 3px solid var(--secondary-color);
+    border-radius: 15px;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 120px;
+}
+
+.option-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+.option-btn.correct {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.option-btn.wrong {
+    background: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-10px); }
+    40%, 80% { transform: translateX(10px); }
+}
+
+/* Feedback Area */
+.feedback-area {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 0 0 26px 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 -10px 20px rgba(0,0,0,0.05);
+}
+
+.feedback-area.hidden {
+    display: none;
+}
+
+#feedback-icon {
+    font-size: 3rem;
+}
+
+#feedback-message {
+    font-size: 1.3rem;
+    white-space: pre-line;
+}
+
+.feedback-explanation {
+    background: var(--explanation-bg);
+    border-left: 5px solid var(--warning-color);
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 600px;
+    text-align: left;
+    margin-top: 0.5rem;
+    color: var(--text-main);
+    font-size: 1.1rem;
+    line-height: 1.5;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.feedback-explanation.hidden {
+    display: none;
+}
+
+.explanation-title {
+    font-weight: 900;
+    font-family: 'Fredoka One', cursive;
+    color: #F39C12;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 3px solid #dfe6e9;
+    font-size: 1.5rem;
+}
+
+.explanation-step {
+    margin-bottom: 0.3rem;
+}
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+    transition: transform 0.2s;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    background: var(--accent-color);
+}
+
+/* Game Specific Styles */
+
+/* Cerakin Game */
+.cerakin-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.cerakin-input {
+    width: 80px;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+    border: 2px solid var(--secondary-color);
+    border-radius: 10px;
+    outline: none;
+}
+.cerakin-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+/* Banding Nombor Game */
+.compare-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+.compare-btn {
+    width: 150px;
+    height: 150px;
+    font-size: 3rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sort-dropzone {
+    width: 100px;
+    height: 100px;
+    background: var(--card-bg);
+    border: 3px dashed #b2bec3;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Susun Nombor Game */
+.susun-source {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.susun-btn {
+    background: var(--card-bg);
+    border: 3px solid var(--secondary-color);
+    border-radius: 12px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.susun-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.05);
+}
+
+.susun-btn.used {
+    opacity: 0.3;
+    pointer-events: none;
+    transform: scale(0.9);
+}
+
+.susun-target {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+    padding: 0.5rem;
+    border: 3px dashed var(--secondary-color);
+    border-radius: 15px;
+    background: rgba(108, 92, 231, 0.05);
+    flex-wrap: wrap;
+}
+
+.susun-placed {
+    background: var(--primary-color);
+    color: white;
+    border-radius: 10px;
+    padding: 0.5rem 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+    animation: popIn 0.3s ease;
+}
+
+.susun-arrow {
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+/* Pola Nombor Game */
+.pola-sequence {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.pola-num {
+    background: var(--primary-color);
+    color: white;
+    border-radius: 12px;
+    padding: 0.7rem 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.pola-blank {
+    width: 80px;
+    padding: 0.7rem;
+    font-size: 1.4rem;
+    text-align: center;
+    border: 3px dashed var(--accent-color);
+    border-radius: 12px;
+    background: rgba(253, 121, 168, 0.1);
+    outline: none;
+    font-weight: 800;
+}
+
+.pola-blank:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(253, 121, 168, 0.2);
+}
+
+.pola-arrow {
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+/* Tambah/Tolak vertical layout */
+.math-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.3rem;
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: 8px;
+    margin-bottom: 1.5rem;
+    font-family: 'Fredoka One', cursive;
+}
+
+.math-vertical .math-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.math-vertical .math-operator {
+    font-size: 2rem;
+    color: var(--accent-color);
+    letter-spacing: 0;
+}
+
+.math-vertical .math-line {
+    width: 100%;
+    height: 4px;
+    background: var(--text-main);
+    border-radius: 2px;
+}
+
+.math-answer-input {
+    width: 160px;
+    padding: 0.5rem;
+    font-size: 2.2rem;
+    text-align: center;
+    border: 3px solid var(--secondary-color);
+    border-radius: 12px;
+    outline: none;
+    font-weight: 900;
+    font-family: 'Fredoka One', cursive;
+    letter-spacing: 8px;
+}
+
+.math-answer-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+@media (max-width: 600px) {
+    header h1 { font-size: 2rem; }
+    .game-container { padding: 1.5rem; }
+    .question-text { font-size: 2rem; }
+    .compare-btn { width: 100px; height: 100px; font-size: 2rem; }
+    .math-vertical { font-size: 2rem; letter-spacing: 6px; }
+    .math-answer-input { font-size: 1.8rem; width: 130px; letter-spacing: 6px; }
+    .section-header { font-size: 1.1rem; }
+}
+
+/* Anggar Nombor Game */
+.anggar-container {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+}
+
+.anggar-jar-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.anggar-jar {
+    width: 100px;
+    height: 140px;
+    border: 5px solid var(--jar-border);
+    border-radius: 10px 10px 30px 30px;
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+}
+
+.anggar-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--warning-color);
+    border-top: 3px dashed rgba(0,0,0,0.15);
+    transition: height 0.5s ease-out;
+}
+
+.anggar-jar-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    z-index: 2;
+    font-family: 'Fredoka One', cursive;
+}
+
+.anggar-qty {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+/* Top Bar and Dashboard Button */
+.top-bar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+.btn-dashboard {
+    background: var(--card-bg);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.btn-dashboard:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Modal Styling */
+.modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    width: 90%;
+    max-width: 800px;
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px; right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--close-btn-color);
+}
+
+.close-btn:hover { color: var(--close-btn-hover); }
+
+.dashboard-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #dfe6e9;
+    padding-bottom: 10px;
+    background: var(--card-bg);
+}
+
+.tab-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #888;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+
+.tab-btn.active {
+    color: var(--primary-color);
+    background: var(--tab-active-bg);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+.history-table th, .history-table td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid #dfe6e9;
+}
+
+.history-table th {
+    background: var(--table-header-bg);
+    font-weight: bold;
+}
+
+.history-table tbody tr:nth-child(even) {
+    background: var(--table-row-even);
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
