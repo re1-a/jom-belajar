@@ -838,7 +838,7 @@
             <button class="header-tool-btn" id="tab-print" onclick="window.print()" title="Print A4">🖨️</button>
             <button class="header-tool-btn" id="btn-dark-mode" onclick="toggleDarkMode()" title="Gelap/Terang">🌙</button>
         </div>
-        <span class="version-badge">v1.3.6</span>
+        <span class="version-badge">v1.3.7</span>
         <h1>📚 Bijak KAFA — Revision Darjah 2</h1>
         <div class="subtitle">Lughatul Arabiyyah • Selangor • Exam Pertengahan Tahun 2026</div>
     </header>
@@ -846,11 +846,13 @@
     <!-- ============================================
          MODE TABS
          ============================================ -->
-    <nav class="mode-tabs" id="mode-tabs">
-        <button class="mode-tab active" data-mode="browse" id="tab-browse">📖 Belajar</button>
-        <button class="mode-tab" data-mode="quiz" id="tab-quiz">🧠 Kuiz</button>
-        <button class="mode-tab" data-mode="progress" id="tab-progress">📊 Progress</button>
-    </nav>
+    <div style="background: var(--bg-tabs); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; width: 100%;">
+        <nav class="mode-tabs" id="mode-tabs" style="max-width: 900px; margin: 0 auto; background: transparent; border: none; padding-top: 16px; padding-bottom: 16px;">
+            <button class="mode-tab active" data-mode="browse" id="tab-browse">📖 Belajar</button>
+            <button class="mode-tab" data-mode="quiz" id="tab-quiz">🧠 Kuiz</button>
+            <button class="mode-tab" data-mode="progress" id="tab-progress">📊 Progress</button>
+        </nav>
+    </div>
 
     <!-- ============================================
          TOPIC FILTERS
