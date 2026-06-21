@@ -778,7 +778,7 @@
          HEADER
          ============================================ -->
     <header class="app-header" id="app-header">
-        <span class="version-badge">v1.2.2</span>
+        <span class="version-badge">v1.2.3</span>
         <h1>📚 Bijak KAFA — Revision Darjah 2</h1>
         <div class="subtitle">Lughatul Arabiyyah • Selangor • Exam Pertengahan Tahun 2026</div>
     </header>
@@ -1372,7 +1372,7 @@
                     <span class="quiz-emoji">${q.emoji}</span>
                     <div class="quiz-question-label">Apakah dalam Bahasa Arab?</div>
                     <div class="quiz-question">${q.bm}</div>
-                    <div class="quiz-rumi">${q.rumi}</div>
+                    <div class="quiz-rumi hidden" id="quiz-rumi-hint">${q.rumi}</div>
                     <div class="quiz-options">
                         ${options.map((opt, i) => `
                             <button class="quiz-option" data-arab="${opt.arab}" data-correct="${opt.arab === q.arab}" id="quiz-opt-${i}"
@@ -1398,6 +1398,9 @@
         const isCorrect = btn.dataset.correct === 'true';
         const feedback = document.getElementById('quiz-feedback');
         const q = quizState.questions[quizState.currentIndex];
+
+        const rumiHint = document.getElementById('quiz-rumi-hint');
+        if (rumiHint) rumiHint.classList.remove('hidden');
 
         // Disable all options
         document.querySelectorAll('.quiz-option').forEach(opt => {
