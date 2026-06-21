@@ -82,7 +82,9 @@ function nextQuestion() {
     else if (currentGame === 'bundar') generateBundar();
     else if (currentGame === 'cerakin') generateCerakin();
     else if (currentGame === 'ejaan') generateEjaan();
-    else if (currentGame === 'darab-bahagi') generateDarabBahagi();
+    else if (currentGame === 'tolak') generateTolak();
+    else if (currentGame === 'darab') generateDarab();
+    else if (currentGame === 'bahagi') generateBahagi();
     else if (currentGame === 'susun-nombor') generateSusunNombor();
     else if (currentGame === 'pola-nombor') generatePolaNombor();
     else if (currentGame === 'tambah') generateTambah();
@@ -511,28 +513,15 @@ function generateEjaan() {
 
 
 // ===========================
-// 6. DARAB & BAHAGI
+// 6. DARAB
 // ===========================
-function generateDarabBahagi() {
-    const isDarab = Math.random() > 0.5;
-    let n1, n2, ans;
-    
-    if (isDarab) {
-        document.getElementById('game-instruction').innerText = 'Selesaikan operasi darab';
-        const sifir = [2, 3, 4, 5, 10];
-        n1 = sifir[generateRandomNumber(0, sifir.length - 1)];
-        n2 = generateRandomNumber(1, 9);
-        ans = n1 * n2;
-        document.getElementById('game-area').innerHTML = `<div class="question-text">${n2} &times; ${n1} = ?</div>`;
-    } else {
-        document.getElementById('game-instruction').innerText = 'Selesaikan operasi bahagi';
-        const sifir = [2, 3, 4, 5, 10];
-        n2 = sifir[generateRandomNumber(0, sifir.length - 1)];
-        let n = generateRandomNumber(1, 9);
-        n1 = n * n2;
-        ans = n;
-        document.getElementById('game-area').innerHTML = `<div class="question-text">${n1} &divide; ${n2} = ?</div>`;
-    }
+function generateDarab() {
+    document.getElementById('game-instruction').innerText = 'Selesaikan operasi darab';
+    const sifir = [2, 3, 4, 5, 10];
+    let n1 = sifir[generateRandomNumber(0, sifir.length - 1)];
+    let n2 = generateRandomNumber(1, 9);
+    let ans = n1 * n2;
+    document.getElementById('game-area').innerHTML = `<div class="question-text">${n2} &times; ${n1} = ?</div>`;
     
     currentAnswer = ans.toString();
     
@@ -546,19 +535,44 @@ function generateDarabBahagi() {
     
     let options = shuffleArray([currentAnswer, ...wrongs.map(w => w.toString())]);
     
-    if (isDarab) {
-        currentExplanation = `
-            <div class="explanation-step">Darab ialah tambah berulang.</div>
-            <div class="explanation-step">${n2} &times; ${n1} bermaksud <strong>${n2} kumpulan ${n1}</strong>.</div>
-            <div class="explanation-step">${Array(n2).fill(n1).join(' + ')} = <strong>${ans}</strong></div>
-        `;
-    } else {
-        currentExplanation = `
-            <div class="explanation-step">Bahagi berkait rapat dengan darab.</div>
-            <div class="explanation-step">${n1} &divide; ${n2} bermaksud: Berapa darab ${n2} dapat ${n1}?</div>
-            <div class="explanation-step">Oleh kerana <strong>${ans}</strong> &times; ${n2} = ${n1}, maka jawapannya ialah <strong>${ans}</strong>.</div>
-        `;
-    }
+    currentExplanation = `
+        <div class="explanation-step">Darab ialah tambah berulang.</div>
+        <div class="explanation-step">${n2} &times; ${n1} bermaksud <strong>${n2} kumpulan ${n1}</strong>.</div>
+        <div class="explanation-step">${Array(n2).fill(n1).join(' + ')} = <strong>${ans}</strong></div>
+    `;
+    
+    renderOptions(options);
+}
+
+// ===========================
+// 6.1 BAHAGI
+// ===========================
+function generateBahagi() {
+    document.getElementById('game-instruction').innerText = 'Selesaikan operasi bahagi';
+    const sifir = [2, 3, 4, 5, 10];
+    let n2 = sifir[generateRandomNumber(0, sifir.length - 1)];
+    let n = generateRandomNumber(1, 9);
+    let n1 = n * n2;
+    let ans = n;
+    document.getElementById('game-area').innerHTML = `<div class="question-text">${n1} &divide; ${n2} = ?</div>`;
+    
+    currentAnswer = ans.toString();
+    
+    let wrongSet = new Set();
+    wrongSet.add(ans);
+    wrongSet.add(ans + generateRandomNumber(1, 3));
+    wrongSet.add(Math.max(0, ans - generateRandomNumber(1, 3)));
+    wrongSet.add(ans + generateRandomNumber(4, 7));
+    wrongSet.delete(ans);
+    let wrongs = Array.from(wrongSet).filter(n => n >= 0).slice(0, 2);
+    
+    let options = shuffleArray([currentAnswer, ...wrongs.map(w => w.toString())]);
+    
+    currentExplanation = `
+        <div class="explanation-step">Bahagi berkait rapat dengan darab.</div>
+        <div class="explanation-step">${n1} &divide; ${n2} bermaksud: Berapa darab ${n2} dapat ${n1}?</div>
+        <div class="explanation-step">Oleh kerana <strong>${ans}</strong> &times; ${n2} = ${n1}, maka jawapannya ialah <strong>${ans}</strong>.</div>
+    `;
     
     renderOptions(options);
 }

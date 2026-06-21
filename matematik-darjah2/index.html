@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematik Darjah 2 - Jom Belajar!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HL2PFGWTHM"></script>
@@ -32,7 +32,7 @@
                 <button class="btn-dashboard btn-icon-only" onclick="openDashboard()" title="Laporan Prestasi"><i class="fas fa-chart-line"></i> <span>Laporan Prestasi</span></button>
                 <button id="btn-dark-mode" class="btn-dashboard btn-icon-only" onclick="toggleDarkMode()" title="Gelap/Terang"><i class="fas fa-moon"></i> <span>Gelap</span></button>
             </div>
-            <span class="version-badge" style="margin-left: 10px; font-weight: bold; background: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">v1.1.5</span>
+            <span class="version-badge" style="margin-left: 10px; font-weight: bold; background: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #333;">v1.1.8</span>
         </div>
         <header>
             <h1>Jom Belajar Matematik Darjah 2!</h1>
@@ -116,10 +116,17 @@
                 <div class="module-status"></div>
             </button>
 
-            <button class="menu-card" data-id="darab-bahagi" onclick="startGame('darab-bahagi')">
+            <button class="menu-card" data-id="darab" onclick="startGame('darab')">
                 <div class="card-icon"><i class="fas fa-times"></i></div>
-                <h2>Darab & Bahagi</h2>
-                <p>Cabaran sifir!</p>
+                <h2>Darab</h2>
+                <p>Cabaran sifir darab</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="bahagi" onclick="startGame('bahagi')">
+                <div class="card-icon"><i class="fas fa-divide"></i></div>
+                <h2>Bahagi</h2>
+                <p>Cabaran sifir bahagi</p>
                 <div class="module-status"></div>
             </button>
         </div>
