@@ -497,6 +497,7 @@ body[data-mode="nota"] .module-status { display: none !important; }
     .flashcard-emoji { font-size: 3rem; margin-bottom: 0.2rem; }
     .flashcard-title { font-size: 1.1rem; }
     .flashcard-text { font-size: 0.95rem; }
+    .quiz-img { max-height: 180px; margin-bottom: 0.8rem; }
     .modal-content { padding: 1.5rem; }
     .flashcard-bg-img {
         margin-top: -1.5rem;
