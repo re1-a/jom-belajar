@@ -545,6 +545,8 @@ body[data-mode="nota"] .module-status { display: none !important; }
     object-fit: contain;
     border-radius: 12px;
     margin-bottom: 1.5rem;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 [data-theme="dark"] .flashcard-img, 

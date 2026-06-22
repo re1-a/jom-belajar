@@ -316,7 +316,7 @@ function renderMCQ(question, options, correctAnswer, explanation, image) {
     
     let html = '';
     if (image) {
-        html += `<div style="text-align: center;"><img src="${image}" class="quiz-img" alt="Soalan Bergambar"></div>`;
+        html += `<div style="text-align: center;"><img src="${image}" class="quiz-img" alt="Soalan Bergambar" draggable="false"></div>`;
     }
     html += `<h3 style="text-align: center; margin-bottom: 20px; font-size: 1.5rem;">${question}</h3>`;
     html += `<div class="options-container" id="mcq-options" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;"></div>`;
@@ -343,7 +343,7 @@ function renderTrueFalse(question, isTrue, explanation, image) {
     
     let html = '';
     if (image) {
-        html += `<div style="text-align: center;"><img src="${image}" class="quiz-img" alt="Soalan Bergambar"></div>`;
+        html += `<div style="text-align: center;"><img src="${image}" class="quiz-img" alt="Soalan Bergambar" draggable="false"></div>`;
     }
     html += `<h3 style="text-align: center; margin-bottom: 30px; font-size: 1.5rem; line-height: 1.4;">${question}</h3>`;
     html += `<div style="display: flex; gap: 20px; justify-content: center;">`;
@@ -640,7 +640,7 @@ function renderDragDrop(question, items, zones, correctMapping, explanation, ima
     
     let html = '';
     if (image) {
-        html += `<div style="text-align: center;"><img src="${image}" class="quiz-img" alt="Soalan Bergambar"></div>`;
+        html += `<div style="text-align: center;"><img src="${image}" class="quiz-img" alt="Soalan Bergambar" draggable="false"></div>`;
     }
     html += `<h3 style="text-align: center; margin-bottom: 20px;">${question}</h3>`;
     html += `<div class="drag-container">`;
