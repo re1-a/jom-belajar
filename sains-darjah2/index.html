@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ms" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sains Darjah 2 - Pembelajaran Interaktif</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css?v=11">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Mobile Drag and Drop Polyfill -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/default.css">
+    <script src="https://cdn.jsdelivr.net/npm/mobile-drag-drop@2.3.0-rc.2/index.min.js"></script>
+    <script>
+        // Initialize polyfill immediately
+        MobileDragDrop.polyfill({ holdToDrag: 500 });
+        window.addEventListener('touchmove', function() {}, {passive: false});
+    </script>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <div class="container">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <a href="../index.html" class="btn btn-home">
+                <i class="fas fa-home"></i> <span>Menu Utama</span>
+            </a>
+            <div class="top-bar-right">
+                <span class="version-badge">v2.5.2</span>
+                <button class="btn btn-icon" onclick="openDashboard()" title="Prestasi">
+                    <i class="fas fa-chart-line"></i>
+                </button>
+                <button class="btn btn-icon" onclick="toggleDarkMode()" id="theme-toggle" title="Tukar Tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Menu Screen -->
+        <main id="main-menu" class="screen active">
+            <div class="hero">
+                <h1>Sains Darjah 2</h1>
+                <p>Mari meneroka dunia sains dengan cara yang menyeronokkan!</p>
+                
+                <div class="welcome-container">
+                    <div class="speech-bubble">Hai! Jom belajar sains!</div>
+                    <img src="images/fox_welcome.png?v=2" alt="Fox Welcome" class="fox-welcome">
+                </div>
+            </div>
+
+            <!-- Mode Tabs -->
+            <nav class="mode-tabs">
+                <button class="mode-tab active" id="tab-nota" onclick="switchMode('nota')">📖 Mod Nota</button>
+                <button class="mode-tab" id="tab-kuiz" onclick="switchMode('kuiz')">🧠 Mod Kuiz</button>
+            </nav>
+
+            <!-- Kemahiran Asas -->
+            <div class="section-header kemahiran-section">
+                <div class="icon-wrap"><i class="fas fa-microscope"></i></div>
+                <div>
+                    <h2>Kemahiran Asas Sains</h2>
+                    <p>Unit 1 dan 2</p>
+                </div>
+            </div>
+            <div class="menu-grid" id="grid-kemahiran">
+                <!-- Cards injected by JS -->
+            </div>
+
+            <!-- Penerokaan Sains -->
+            <div class="section-header penerokaan-section">
+                <div class="icon-wrap"><i class="fas fa-globe-asia"></i></div>
+                <div>
+                    <h2>Penerokaan Sains</h2>
+                    <p>Unit 3 hingga 10</p>
+                </div>
+            </div>
+            <div class="menu-grid" id="grid-penerokaan">
+                <!-- Cards injected by JS -->
+            </div>
+        </main>
+
+        <!-- Notes Screen -->
+        <main id="notes-screen" class="notes-screen screen">
+            <div class="notes-header">
+                <button class="btn btn-back" onclick="goHome()">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+                <div class="notes-title">
+                    <i class="fas fa-book-open" style="color: var(--primary-color);"></i>
+                    <h2 id="notes-title-text">Nota Unit</h2>
+                </div>
+            </div>
+
+            <div class="flashcard-container" id="flashcard-container">
+                <!-- Flashcards will be injected here -->
+            </div>
+
+            <div class="flashcard-nav">
+                <button class="nav-btn" id="btn-prev-card" onclick="prevCard()" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="progress-dots" id="flashcard-dots">
+                    <!-- Dots will be injected here -->
+                </div>
+                <button class="nav-btn" id="btn-next-card" onclick="nextCard()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="startQuizFromNotes()" id="btn-start-quiz">
+                    <i class="fas fa-gamepad"></i> Mula Kuiz Sekarang
+                </button>
+            </div>
+        </main>
+
+        <!-- Game Screen -->
+        <main id="game-screen" class="screen">
+            <div class="game-header-bar">
+                <button class="btn btn-back" onclick="goHome()">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+                <div class="score-display">
+                    <i class="fas fa-star" style="color: var(--accent-color);"></i>
+                    <span id="score">0</span>
+                </div>
+            </div>
+
+            <div class="game-container">
+                <div class="game-header">
+                    <h2 id="game-title">Tajuk Unit</h2>
+                    <p id="game-instruction">Sila jawab soalan berikut.</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    <div class="progress-text">Soalan: <span id="current-question-num">1</span>/10</div>
+                </div>
+
+                <div id="game-area" class="game-area">
+                    <!-- Dynamic content -->
+                </div>
+
+                <div id="feedback-area" class="feedback-area hidden">
+                    <div id="feedback-icon" class="feedback-icon"></div>
+                    <h3 id="feedback-title"></h3>
+                    <p id="feedback-message"></p>
+                    <div id="explanation-box" class="explanation-box hidden">
+                        <h4><i class="fas fa-lightbulb"></i> Mari Belajar</h4>
+                        <p id="explanation-text"></p>
+                    </div>
+                    <button class="btn btn-primary btn-next" id="btn-next-question" onclick="proceedToNext()">
+                        Seterusnya <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Summary Modal -->
+    <div id="summary-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2 id="summary-title">Tahniah!</h2>
+            <div class="summary-score">
+                <span id="final-score">0</span>%
+            </div>
+            <p id="summary-message">Anda telah menamatkan latihan ini.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeSummaryAndHome()">Kembali</button>
+                <button class="btn btn-primary" onclick="closeSummaryAndRestart()">Main Semula</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Modal -->
+    <div id="dashboard-modal" class="modal" style="display: none;">
+        <div class="modal-content dashboard-content">
+            <div class="modal-header">
+                <h2>Analisis Prestasi Sains</h2>
+                <button class="btn-close" onclick="closeDashboard()"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" onclick="switchTab(event, 'tab-daily')">Graf Harian</button>
+                <button class="tab-btn" onclick="switchTab(event, 'tab-module')">Analisis Unit</button>
+                <button class="tab-btn" onclick="switchTab(event, 'tab-history')">Sejarah</button>
+            </div>
+
+            <div id="tab-daily" class="tab-content active">
+                <canvas id="dailyChart"></canvas>
+            </div>
+
+            <div id="tab-module" class="tab-content">
+                <canvas id="moduleChart"></canvas>
+            </div>
+
+            <div id="tab-history" class="tab-content">
+                <div class="table-container">
+                    <table id="history-table">
+                        <thead>
+                            <tr>
+                                <th>Tarikh</th>
+                                <th>Unit</th>
+                                <th>Markah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" preload="auto"></audio>
+    <audio id="audio-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
+    <audio id="audio-complete" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" preload="auto"></audio>
+
+    <!-- Scripts -->
+    <script src="notes_data.js?v=53"></script>
+    <script src="audio_db.js"></script>
+    <script src="script.js?v=53"></script>
+</body>
+</html>
