@@ -259,7 +259,7 @@ function startGame(gameId) {
         'unit10': typeof unit10Data !== 'undefined' ? unit10Data : []
     };
     
-    currentQuizData = shuffleArray([...dataMap[gameId]]);
+    currentQuizData = shuffleArray([...dataMap[gameId]]).filter(q => q.type !== 'drag');
     maxQuestions = currentQuizData.length;
 
     document.getElementById('score').innerText = '0';
