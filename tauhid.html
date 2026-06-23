@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bijak KAFA — Nota Tauhid Darjah 2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #FDF6E3;
+            --bg-card: #FFFFFF;
+            --bg-tabs: rgba(255,255,255,0.95);
+            --bg-header: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            --text-primary: #2D3748;
+            --text-secondary: #4A5568;
+            --text-light: #718096;
+            --border: #E2E8F0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            --correct-bg: #C6F6D5;
+            --correct: #48BB78;
+            --wrong-bg: #FED7D7;
+            --wrong: #F56565;
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #1A202C;
+            --bg-card: #2D3748;
+            --bg-tabs: rgba(26,32,44,0.95);
+            --bg-header: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+            --text-primary: #F7FAFC;
+            --text-secondary: #E2E8F0;
+            --text-light: #A0AEC0;
+            --border: #4A5568;
+            --shadow: 0 4px 20px rgba(0,0,0,0.5);
+            
+            --correct-bg: rgba(72, 187, 120, 0.2);
+            --wrong-bg: rgba(245, 101, 101, 0.2);
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .app-header {
+            position: relative;
+            background: var(--bg-header);
+            color: white;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(139, 92, 246, 0.4);
+            transition: background 0.3s;
+        }
+
+        .app-header h1 { font-size: 28px; margin: 0 0 4px 0; }
+        .app-header .subtitle { font-size: 14px; opacity: 0.9; }
+        
+        .btn-home-header {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .header-tools {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-tool-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            padding: 0;
+        }
+
+        .header-tool-btn:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.1);
+        }
+
+        .version-badge {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: var(--bg-card);
+            color: #8b5cf6;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .mode-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 24px;
+            background: var(--bg-tabs);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .mode-tab {
+            padding: 10px 24px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: var(--bg-card);
+            font-family: 'Lexend', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .mode-tab.active {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            border-color: transparent;
+        }
+        
+        [data-theme="dark"] .mode-tab.active {
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+        }
+
+        .topic-filters {
+            display: flex;
+            gap: 8px;
+            padding: 16px 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .topic-pill {
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            font-family: 'Lexend', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .topic-pill.active {
+            background: #8b5cf6;
+            color: white;
+            border-color: transparent;
+        }
+
+        [data-theme="dark"] .topic-pill.active {
+            background: #667EEA;
+        }
+
+        .content-area {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8px 20px 40px;
+        }
+
+        .nota-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .nota-card h2 {
+            color: #6d28d9;
+            margin-top: 0;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        [data-theme="dark"] .nota-card h2 {
+            color: #B794F4;
+        }
+
+        .nota-card h3 {
+            color: #8b5cf6;
+            margin-bottom: 8px;
+        }
+
+        [data-theme="dark"] .nota-card h3 {
+            color: #D6BCFA;
+        }
+
+        .nota-card ul {
+            padding-left: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        table, th, td {
+            border: 1px solid var(--border);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: rgba(139, 92, 246, 0.1);
+            color: #6d28d9;
+        }
+
+        [data-theme="dark"] th {
+            background-color: rgba(159, 122, 234, 0.2);
+            color: #D6BCFA;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Quiz Styles */
+        .quiz-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px 24px;
+            text-align: center;
+            border: 2px solid var(--border);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .quiz-question {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            font-family: 'Lexend', sans-serif;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-primary);
+        }
+
+        .quiz-option:hover:not(.disabled) {
+            border-color: #8b5cf6;
+            transform: scale(1.02);
+        }
+
+        [data-theme="dark"] .quiz-option:hover:not(.disabled) {
+            border-color: #9F7AEA;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--correct);
+            background: var(--correct-bg);
+            color: #2D3748;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--wrong);
+            background: var(--wrong-bg);
+            color: #2D3748;
+        }
+
+        .quiz-option.disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .quiz-next-btn {
+            margin-top: 20px;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+        }
+
+        [data-theme="dark"] .quiz-next-btn {
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+        }
+
+        .quiz-next-btn.show { display: inline-block; }
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <a href="index.html" class="btn-home-header">🏠 Menu Utama</a>
+        <div class="header-tools">
+            <button class="header-tool-btn" id="btn-dark-mode" onclick="toggleDarkMode()" title="Gelap/Terang">🌙</button>
+        </div>
+        <span class="version-badge">v1.5.0</span>
+        <h1>Bijak KAFA — Tauhid Darjah 2</h1>
+        <div class="subtitle">Nota Lengkap & Kuiz Mengikut Silibus JAIS</div>
+    </header>
+
+    <div style="background: var(--bg-tabs); position: sticky; top: 0; z-index: 100;">
+        <nav class="mode-tabs">
+            <button class="mode-tab active" data-mode="browse" id="tab-browse">Nota Lengkap</button>
+            <button class="mode-tab" data-mode="quiz" id="tab-quiz">Kuiz</button>
+            <a href="Nota_Pantas_Tauhid.html" target="_blank" class="mode-tab" style="text-decoration: none; color: inherit;">Nota Pantas (1 Muka)</a>
+        </nav>
+    </div>
+
+    <div class="topic-filters" id="topic-filters">
+        <button class="topic-pill active" data-topic="sifat">Sifat Allah</button>
+        <button class="topic-pill" data-topic="malaikat">Malaikat</button>
+        <button class="topic-pill" data-topic="kitab">Kitab</button>
+    </div>
+
+    <main class="content-area">
+        <div id="browse-view">
+            <!-- Nota Content Injected by JS -->
+        </div>
+
+        <div id="quiz-view" class="hidden">
+            <div id="quiz-container">
+                <!-- Quiz Injected by JS -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const notaData = {
+            sifat: `
+                <div class="nota-card">
+                    <h2>Pelajaran Pertama: Sifat Allah SWT yang Wajib dan Mustahil</h2>
+                    <p>Mengenali sifat Allah SWT adalah asas dalam memantapkan akidah. Setiap sifat yang <strong>wajib</strong> bagi Allah mempunyai sifat lawannya yang <strong>mustahil</strong> bagi Allah. Pelajaran ini mengandungi lima (5) sifat.</p>
+
+                    <h3>Unit 1: Qidam (قِدَمٌ) — lawannya Hudus (حُدُوثٌ)</h3>
+                    <ul>
+                        <li><strong>Maksud:</strong> Sedia ada. Allah SWT sedia ada dan tiada permulaan bagi kewujudan-Nya.</li>
+                        <li><strong>Sifat Lawan (Mustahil):</strong> Hudus (حُدُوثٌ) bermaksud baharu, iaitu ada permulaan.</li>
+                        <li><strong>Hukum:</strong> Wajib bagi Allah SWT bersifat Qidam dan mustahil bagi Allah bersifat Hudus (baharu).</li>
+                        <li><strong>Dalil Naqli:</strong> Surah Al-Hadid, ayat 3:
+                            <blockquote style="font-family: 'Amiri', serif; font-size: 26px; direction: rtl; margin: 10px 0; background: rgba(139, 92, 246, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid #8b5cf6;">هُوَ ٱلْأَوَّلُ وَٱلْءَاخِرُ وَٱلظَّاهِرُ وَٱلْبَاطِنُ ۖ وَهُوَ بِكُلِّ شَىْءٍ عَلِيمٌ</blockquote>
+                            <em>"Dialah Yang Awal dan Yang Akhir, Yang Zahir dan Yang Batin; dan Dia Maha Mengetahui akan tiap-tiap sesuatu."</em><br>
+                            <small>(Perkataan <strong>"Yang Awal"</strong> menunjukkan Allah tiada permulaan — inilah maksud Qidam.)</small>
+                        </li>
+                        <li><strong>Faedah mengenal sifat Qidam:</strong>
+                            <ol>
+                                <li>Iman menjadi semakin kukuh.</li>
+                                <li>Sentiasa taat kepada perintah Allah SWT.</li>
+                                <li>Sentiasa berakhlak mulia dalam kehidupan.</li>
+                            </ol>
+                        </li>
+                    </ul>
+
+                    <h3>Unit 2: Baqa' (بَقَاءٌ) — lawannya Fanaa' (فَنَاءٌ)</h3>
+                    <ul>
+                        <li><strong>Maksud:</strong> Kekal. Allah SWT tetap ada dan tidak akan binasa atau berakhir.</li>
+                        <li><strong>Sifat Lawan (Mustahil):</strong> Fanaa' (فَنَاءٌ) bermaksud binasa.</li>
+                        <li><strong>Hukum:</strong> Wajib bagi Allah SWT bersifat Baqa' dan mustahil bagi Allah bersifat Fanaa' (binasa).</li>
+                        <li><strong>Dalil Naqli:</strong> Surah Ar-Rahman, ayat 26–27:
+                            <blockquote style="font-family: 'Amiri', serif; font-size: 26px; direction: rtl; margin: 10px 0; background: rgba(139, 92, 246, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid #8b5cf6;">كُلُّ مَنْ عَلَيْهَا فَانٍ وَيَبْقَىٰ وَجْهُ رَبِّكَ ذُو ٱلْجَلَالِ وَٱلْإِكْرَامِ</blockquote>
+                            <em>"Segala yang ada di bumi itu akan binasa. Dan akan kekal Zat Tuhanmu yang mempunyai Kebesaran dan Kemuliaan."</em>
+                        </li>
+                        <li><strong>Faedah mengenal sifat Baqa':</strong>
+                            <ol>
+                                <li>Mengakui kebesaran dan kekuasaan Allah SWT.</li>
+                                <li>Sentiasa mengingati mati dan membuat persiapan untuk akhirat.</li>
+                            </ol>
+                        </li>
+                    </ul>
+
+                    <h3>Unit 3: Mukhalafatuhu lil-Hawadith (مُخَالَفَتُهُ تَعَالَى لِلْحَوَادِثِ) — lawannya Mumathalatuhu lil-Hawadith (مُمَاثَلَتُهُ تَعَالَى لِلْحَوَادِثِ)</h3>
+                    <ul>
+                        <li><strong>Maksud:</strong> Berbeza Allah SWT dengan segala yang baharu (makhluk). Allah tidak serupa dengan apa yang dicipta-Nya.</li>
+                        <li><strong>Sifat Lawan (Mustahil):</strong> Mumathalatuhu lil-Hawadith bermaksud Allah menyerupai makhluk.</li>
+                        <li><strong>Hukum:</strong> Wajib bagi Allah SWT berbeza dengan makhluk dan mustahil Allah menyerupai makhluk.</li>
+                        <li><strong>Dalil Naqli:</strong> Surah Asy-Syura, ayat 11:
+                            <blockquote style="font-family: 'Amiri', serif; font-size: 26px; direction: rtl; margin: 10px 0; background: rgba(139, 92, 246, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid #8b5cf6;">لَيْسَ كَمِثْلِهِ شَىْءٌ ۖ وَهُوَ ٱلسَّمِيعُ ٱلْبَصِيرُ</blockquote>
+                            <em>"Tiada sesuatu pun yang serupa dengan-Nya, dan Dialah Yang Maha Mendengar lagi Maha Melihat."</em>
+                        </li>
+                        <li><strong>Faedah mengenal sifat ini:</strong>
+                            <ol>
+                                <li>Mengenali keagungan Allah yang tiada tolok bandingnya.</li>
+                                <li>Tidak menggambarkan Allah SWT seperti makhluk ciptaan-Nya.</li>
+                            </ol>
+                        </li>
+                    </ul>
+
+                    <h3>Unit 4: Qiyamuhu binafsihi (قِيَامُهُ تَعَالَى بِنَفْسِهِ) — lawannya Qiyamuhu bighairihi (قِيَامُهُ تَعَالَى بِغَيْرِهِ)</h3>
+                    <ul>
+                        <li><strong>Maksud:</strong> Allah SWT berdiri dengan sendiri-Nya, tidak memerlukan bantuan, tempat, atau sesuatu yang lain.</li>
+                        <li><strong>Sifat Lawan (Mustahil):</strong> Qiyamuhu bighairihi (قِيَامُهُ بِغَيْرِهِ) bermaksud Allah berdiri (bergantung) dengan yang lain.</li>
+                        <li><strong>Hukum:</strong> Wajib bagi Allah SWT berdiri dengan sendiri-Nya dan mustahil Allah berdiri dengan yang lain.</li>
+                        <li><strong>Dalil Naqli:</strong> Surah Al-'Ankabut, ayat 6:
+                            <blockquote style="font-family: 'Amiri', serif; font-size: 26px; direction: rtl; margin: 10px 0; background: rgba(139, 92, 246, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid #8b5cf6;">إِنَّ ٱللَّهَ لَغَنِىٌّ عَنِ ٱلْعَالَمِينَ</blockquote>
+                            <em>"Sesungguhnya Allah Maha Kaya (tidak berhajat kepada sesuatu) daripada sekalian alam."</em>
+                        </li>
+                        <li><strong>Faedah mengenal sifat ini:</strong>
+                            <ol>
+                                <li>Menyedari Allah SWT Maha Kaya dan tidak bergantung kepada sesiapa.</li>
+                                <li>Menambah keyakinan terhadap kekuasaan Allah SWT.</li>
+                            </ol>
+                        </li>
+                    </ul>
+
+                    <h3>Unit 5: Wahdaniyyah (وَحْدَانِيَّةٌ) — lawannya Ta'addud (تَعَدُّدٌ)</h3>
+                    <ul>
+                        <li><strong>Maksud:</strong> Esa atau tunggal. Allah SWT satu pada zat, sifat, dan perbuatan-Nya.</li>
+                        <li><strong>Sifat Lawan (Mustahil):</strong> Ta'addud (تَعَدُّدٌ) bermaksud berbilang-bilang.</li>
+                        <li><strong>Hukum:</strong> Wajib bagi Allah SWT bersifat Esa dan mustahil Allah bersifat berbilang.</li>
+                        <li><strong>Dalil Naqli:</strong> Surah Al-Ikhlas, ayat 1:
+                            <blockquote style="font-family: 'Amiri', serif; font-size: 26px; direction: rtl; margin: 10px 0; background: rgba(139, 92, 246, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid #8b5cf6;">قُلْ هُوَ ٱللَّهُ أَحَدٌ</blockquote>
+                            <em>"Katakanlah (wahai Muhammad): Dialah Allah Yang Maha Esa."</em>
+                        </li>
+                        <li><strong>Faedah mengenal sifat Wahdaniyyah:</strong>
+                            <ol>
+                                <li>Tidak menyembah tuhan selain Allah SWT.</li>
+                                <li>Ketaatan kepada perintah Allah menjadi lebih mantap.</li>
+                                <li>Iman bertambah kukuh dan teguh.</li>
+                            </ol>
+                        </li>
+                    </ul>
+                </div>
+`,
+            malaikat: `
+                <div class="nota-card">
+                    <h2>Pelajaran Kedua: Beriman kepada Malaikat</h2>
+                    <p>Beriman kepada Malaikat merupakan <strong>rukun iman yang kedua</strong>.</p>
+                    
+                    <h3>Unit 1: Pengertian, Hukum dan Dalil Beriman kepada Malaikat</h3>
+                    <ul>
+                        <li><strong>Pengertian:</strong> Malaikat ialah makhluk Allah SWT yang diciptakan daripada cahaya (nur). Mereka tidak mempunyai jantina (bukan lelaki atau perempuan), tidak makan, tidak minum, dan tidak tidur.</li>
+                        <li><strong>Hukum:</strong> Wajib bagi setiap umat Islam beriman kepada Malaikat.</li>
+                        <li><strong>Dalil Naqli:</strong> Surah Al-Baqarah, ayat 285:
+                            <blockquote style="font-family: 'Amiri', serif; font-size: 26px; direction: rtl; margin: 10px 0; background: rgba(139, 92, 246, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid #8b5cf6;">كُلٌّ ءَامَنَ بِٱللَّهِ وَمَلَـٰئِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ</blockquote>
+                            <em>"Semuanya beriman kepada Allah, malaikat-malaikat-Nya, kitab-kitab-Nya, dan rasul-rasul-Nya."</em>
+                        </li>
+                    </ul>
+
+                    <h3>Unit 2: Nama, Tugas dan Sifat Malaikat</h3>
+                    <p><strong>Sepuluh (10) Malaikat dan tugasnya:</strong></p>
+                    <table>
+                        <tr><th>Bil</th><th>Nama Malaikat</th><th>Tugas Utama</th></tr>
+                        <tr><td>1</td><td>Jibril</td><td>Menyampaikan wahyu kepada para Nabi dan Rasul.</td></tr>
+                        <tr><td>2</td><td>Mikail</td><td>Menguruskan rezeki dan menurunkan hujan.</td></tr>
+                        <tr><td>3</td><td>Israfil</td><td>Meniup sangkakala apabila tiba hari kiamat.</td></tr>
+                        <tr><td>4</td><td>Izrail</td><td>Mencabut nyawa setiap makhluk yang bernyawa.</td></tr>
+                        <tr><td>5</td><td>Raqib</td><td>Mencatat segala amalan baik manusia.</td></tr>
+                        <tr><td>6</td><td>Atid</td><td>Mencatat segala amalan buruk manusia.</td></tr>
+                        <tr><td>7</td><td>Munkar</td><td>Menyoal orang mati di dalam kubur.</td></tr>
+                        <tr><td>8</td><td>Nakir</td><td>Menyoal orang mati di dalam kubur.</td></tr>
+                        <tr><td>9</td><td>Ridzwan</td><td>Menjaga pintu syurga.</td></tr>
+                        <tr><td>10</td><td>Malik</td><td>Menjaga pintu neraka.</td></tr>
+                    </table>
+
+                    <p><strong>Perbandingan sifat Malaikat dan manusia:</strong></p>
+                    <table>
+                        <tr><th>Perkara</th><th>Malaikat</th><th>Manusia</th></tr>
+                        <tr><td>Asal kejadian</td><td>Dicipta daripada cahaya (nur).</td><td>Dicipta daripada tanah (bagi Nabi Adam) dan air mani.</td></tr>
+                        <tr><td>Sifat fizikal</td><td>Tidak berjantina.</td><td>Berjantina (lelaki dan perempuan).</td></tr>
+                        <tr><td>Keperluan asas</td><td>Tidak makan, tidak minum, dan tidak tidur.</td><td>Perlu makan, minum, dan tidur.</td></tr>
+                        <tr><td>Ketaatan</td><td>Sentiasa taat dan patuh kepada perintah Allah.</td><td>Ada yang taat dan ada yang ingkar.</td></tr>
+                    </table>
+                </div>
+`,
+            kitab: `
+                <div class="nota-card">
+                    <h2>Pelajaran Ketiga: Beriman kepada Kitab</h2>
+                    <p>Beriman kepada kitab-kitab Allah merupakan <strong>rukun iman yang ketiga</strong>.</p>
+                    
+                    <h3>Unit 1: Pengertian, Hukum dan Dalil Beriman kepada Kitab</h3>
+                    <ul>
+                        <li><strong>Pengertian:</strong> Kitab-kitab Allah ialah kalam Allah (kata-kata Allah) yang diwahyukan kepada para Rasul untuk disampaikan kepada umat manusia sebagai panduan hidup.</li>
+                        <li><strong>Hukum:</strong> Wajib dipercayai bahawa Allah telah menurunkan kitab-kitab suci kepada para Rasul tertentu.</li>
+                        <li><strong>Bilangan kitab</strong> yang wajib diketahui ialah <strong>empat (4)</strong>.</li>
+                        <li><strong>Dalil Naqli:</strong> Surah An-Nisa', ayat 136:
+                            <blockquote style="font-family: 'Amiri', serif; font-size: 26px; direction: rtl; margin: 10px 0; background: rgba(139, 92, 246, 0.05); padding: 15px; border-radius: 8px; border-right: 4px solid #8b5cf6;">ءَامِنُوا۟ بِٱللَّهِ وَرَسُولِهِ وَٱلْكِتَـٰبِ ٱلَّذِى نَزَّلَ عَلَىٰ رَسُولِهِ وَٱلْكِتَـٰبِ ٱلَّذِىٓ أَنزَلَ مِن قَبْلُ</blockquote>
+                            <em>"Berimanlah kamu kepada Allah dan Rasul-Nya, dan kepada Kitab yang diturunkan kepada Rasul-Nya, serta Kitab yang diturunkan sebelumnya."</em>
+                        </li>
+                    </ul>
+
+                    <h3>Unit 2: Kitab yang Diturunkan Allah kepada Para Rasul</h3>
+                    <table>
+                        <tr><th>Bil</th><th>Nama Kitab</th><th>Rasul yang Menerimanya</th></tr>
+                        <tr><td>1</td><td>Taurat</td><td>Nabi Musa AS</td></tr>
+                        <tr><td>2</td><td>Zabur</td><td>Nabi Daud AS</td></tr>
+                        <tr><td>3</td><td>Injil</td><td>Nabi Isa AS</td></tr>
+                        <tr><td>4</td><td>Al-Quran</td><td>Nabi Muhammad SAW</td></tr>
+                    </table>
+
+                    <h3>Nota tambahan:</h3>
+                    <ul>
+                        <li>Al-Quran ialah kitab terakhir yang diturunkan oleh Allah SWT dan menjadi pelengkap serta penyempurna kepada kitab-kitab sebelumnya.</li>
+                        <li>Membaca dan memahami isi kandungan Al-Quran dituntut dalam Islam sebagai panduan kehidupan seharian.</li>
+                    </ul>
+                </div>
+`
+        };
+
+        const quizData = {
+            sifat: [
+                { q: "Berapakah bilangan sifat wajib bagi Allah?", options: ["Dua puluh", "Sebelas", "Sepuluh"], answer: 0 },
+                { q: "Apakah maksud Wujud?", options: ["Sedia ada", "Ada", "Kekal"], answer: 1 },
+                { q: "Qidam ertinya?", options: ["Kekal", "Esa", "Sedia ada"], answer: 2 },
+                { q: "Lawan sifat Baqa' ialah?", options: ["Fana'", "Qidam", "Hudus"], answer: 0 },
+                { q: "\"Allah itu Esa\" adalah pengertian bagi sifat?", options: ["Ta'addud", "Qidam", "Wahdaniyyah"], answer: 2 }
+            ],
+            malaikat: [
+                { q: "Apakah pengertian malaikat?", options: ["Lelaki merdeka yang dipilih Allah", "Makhluk Allah yang dicipta daripada cahaya", "Makhluk yang mempunyai jantina"], answer: 1 },
+                { q: "Apakah hukum beriman dengan kewujudan malaikat?", options: ["Sunat", "Wajib", "Harus"], answer: 1 },
+                { q: "Berapakah bilangan malaikat yang wajib kita tahu?", options: ["Sepuluh", "Sebelas", "Dua puluh"], answer: 0 },
+                { q: "Malaikat yang menyampaikan wahyu ialah?", options: ["Mikail", "Jibril", "Israfil"], answer: 1 },
+                { q: "Mencabut nyawa segala makhluk adalah tugas malaikat?", options: ["Mikail", "Izrail", "Raqib"], answer: 1 }
+            ],
+            kitab: [
+                { q: "Kitab suci yang wajib diketahui ada?", options: ["Dua", "Tujuh", "Empat"], answer: 2 },
+                { q: "Kitab diturunkan kepada nabi dan?", options: ["Jin", "Rasul", "Malaikat"], answer: 1 },
+                { q: "Wajib mengamalkan isi kandungan ___ dengan ikhlas.", options: ["Buku cerita", "Al-Quran", "Majalah"], answer: 1 },
+                { q: "Kitab Az-Zabur diturunkan kepada Nabi?", options: ["Nabi Musa AS", "Nabi Daud AS", "Nabi Isa AS"], answer: 1 },
+                { q: "Suhuf dari segi bahasa bermaksud?", options: ["Buku tebal", "Lembaran", "Surat khabar"], answer: 1 }
+            ]
+        };
+
+        // Dark Mode Logic
+        function toggleDarkMode() {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                document.getElementById('btn-dark-mode').textContent = '🌙';
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                document.getElementById('btn-dark-mode').textContent = '☀️';
+            }
+        }
+
+        // Initialize Theme
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('btn-dark-mode').textContent = '☀️';
+        }
+
+        // UI State
+        let currentMode = 'browse';
+        let currentTopic = 'sifat';
+        let currentQuizIndex = 0;
+        let score = 0;
+
+        // Elements
+        const browseView = document.getElementById('browse-view');
+        const quizView = document.getElementById('quiz-view');
+        const quizContainer = document.getElementById('quiz-container');
+        
+        // Tab Switching
+        document.getElementById('tab-browse').addEventListener('click', () => setMode('browse'));
+        document.getElementById('tab-quiz').addEventListener('click', () => setMode('quiz'));
+
+        // Topic Switching
+        document.querySelectorAll('.topic-pill').forEach(pill => {
+            pill.addEventListener('click', (e) => {
+                document.querySelectorAll('.topic-pill').forEach(p => p.classList.remove('active'));
+                e.target.classList.add('active');
+                currentTopic = e.target.getAttribute('data-topic');
+                renderContent();
+            });
+        });
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('tab-browse').classList.toggle('active', mode === 'browse');
+            document.getElementById('tab-quiz').classList.toggle('active', mode === 'quiz');
+            
+            if (mode === 'browse') {
+                browseView.classList.remove('hidden');
+                quizView.classList.add('hidden');
+            } else {
+                browseView.classList.add('hidden');
+                quizView.classList.remove('hidden');
+                startQuiz();
+            }
+            renderContent();
+        }
+
+        function renderContent() {
+            if (currentMode === 'browse') {
+                browseView.innerHTML = notaData[currentTopic];
+            }
+        }
+
+        function startQuiz() {
+            currentQuizIndex = 0;
+            score = 0;
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const questions = quizData[currentTopic];
+            if (currentQuizIndex >= questions.length) {
+                // Quiz complete
+                quizContainer.innerHTML = `
+                    <div class="quiz-card">
+                        <h2>Kuiz Tamat!</h2>
+                        <div style="font-size: 48px; color: #8b5cf6; font-weight: bold;">${score} / ${questions.length}</div>
+                        <button class="quiz-next-btn show" onclick="startQuiz()" style="margin-top: 20px;">Cuba Lagi</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const q = questions[currentQuizIndex];
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                optionsHtml += `<div class="quiz-option" onclick="selectAnswer(${idx}, ${q.answer})">${opt}</div>`;
+            });
+
+            quizContainer.innerHTML = `
+                <div class="quiz-card">
+                    <div style="text-align: left; color: #718096; margin-bottom: 10px;">Soalan ${currentQuizIndex + 1} daripada ${questions.length}</div>
+                    <div class="quiz-question">${q.q}</div>
+                    <div class="quiz-options">
+                        ${optionsHtml}
+                    </div>
+                    <button class="quiz-next-btn" id="next-btn" onclick="nextQuestion()">Seterusnya ➡️</button>
+                </div>
+            `;
+        }
+
+        window.selectAnswer = function(selectedIdx, correctIdx) {
+            const options = document.querySelectorAll('.quiz-option');
+            if (options[0].classList.contains('disabled')) return; // already answered
+
+            options.forEach((opt, idx) => {
+                opt.classList.add('disabled');
+                if (idx === correctIdx) {
+                    opt.classList.add('correct');
+                } else if (idx === selectedIdx && selectedIdx !== correctIdx) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            if (selectedIdx === correctIdx) {
+                score++;
+            }
+
+            document.getElementById('next-btn').classList.add('show');
+        }
+
+        window.nextQuestion = function() {
+            currentQuizIndex++;
+            renderQuizQuestion();
+        }
+
+        // Initialize
+        renderContent();
+    </script>
+</body>
+</html>

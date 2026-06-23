@@ -175,6 +175,63 @@
         .card.bi { --accent: var(--accent-bi); }
         .card.tauhid { --accent: var(--accent-tauhid); }
 
+        /* Categories */
+        .main-container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .category-section {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 30px 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .category-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .category-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .category-header .cat-icon {
+            font-size: 2.5rem;
+        }
+
+        .category-header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .disclaimer {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 20px;
+            text-align: center;
+            max-width: 600px;
+            font-style: italic;
+        }
+
         /* Floating particles effect */
         .particle {
             position: absolute;
@@ -509,6 +566,9 @@
             .card { width: 100%; max-width: 280px; padding: 25px; }
             .card-icon { font-size: 3rem; margin-bottom: 10px; }
             .card h2 { font-size: 1.5rem; }
+            .category-header h2 { font-size: 1.8rem; }
+            .category-header .cat-icon { font-size: 2rem; }
+            .category-section { padding: 20px 10px; border-radius: 20px; }
             .version-badge { font-size: 10px; padding: 3px 8px; top: 10px; right: 10px; }
             .feedback-btn { bottom: 18px; right: 18px; padding: 12px 18px; font-size: 0.88rem; }
             .donate-btn { bottom: 18px; left: 18px; padding: 12px 18px; font-size: 0.88rem; }
@@ -517,54 +577,62 @@
     </style>
 </head>
 <body>
-    <div class="version-badge">v1.5.0</div>
+    <div class="version-badge">v1.6.0</div>
 
     <header>
         <h1>Portal Pembelajaran</h1>
         <p>Pilih subjek untuk memulakan sesi pembelajaran</p>
     </header>
 
-    <div class="cards-container">
-        <!-- New Adventure Mode Link (Hidden for now) -->
-        <!--
-        <a href="adventure/index.html" class="card" style="--accent: #9b59b6; width: 100%; max-width: 800px; margin-bottom: 20px; flex-direction: row; align-items: center; justify-content: space-between; padding: 20px 40px;">
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <div class="card-icon" style="margin-bottom: 0; font-size: 3rem;">🗺️</div>
-                <div style="text-align: left;">
-                    <h2 style="margin-bottom: 5px;">Sains Explorer (Disleksia)</h2>
-                    <p style="margin-bottom: 0; font-size: 0.9rem;">Kuiz interaktif Sains Darjah 2 · Mesra-disleksia · Boleh guna sendiri</p>
-                </div>
+    <div class="main-container">
+        <!-- KPM Section -->
+        <div class="category-section">
+            <div class="category-header">
+                <h2><span class="cat-icon">🏫</span>Sekolah Kebangsaan (KPM)</h2>
+                <p>Silibus kebangsaan terkini</p>
             </div>
-            <span class="card-btn" style="margin-top: 0;">Mula Pengembaraan</span>
-        </a>
-        -->
-        <a href="matematik-darjah2/index.html" class="card math">
-            <div class="card-icon">🔢</div>
-            <h2>Matematik</h2>
-            <p>Latihan interaktif Matematik Darjah 2 Jilid 1</p>
-            <span class="card-btn">Mula Belajar</span>
-        </a>
+            <div class="cards-container" style="padding: 0;">
+                <a href="matematik-darjah2/index.html" class="card math">
+                    <div class="card-icon">🔢</div>
+                    <h2>Matematik</h2>
+                    <p>Latihan interaktif Matematik Darjah 2 Jilid 1</p>
+                    <span class="card-btn">Mula Belajar</span>
+                </a>
 
-        <a href="bahasa-arab.html" class="card arab">
-            <div class="card-icon">🕌</div>
-            <h2>Bahasa Arab</h2>
-            <p>Nota &amp; kuiz Bahasa Arab KAFA Darjah 2 (Negeri Selangor)</p>
-            <span class="card-btn">Mula Belajar</span>
-        </a>
+                <a href="sains-darjah2/index.html" class="card sains">
+                    <div class="card-icon">🦊</div>
+                    <h2>Sains</h2>
+                    <p>Kad nota interaktif &amp; kuiz Sains Darjah 2 bersama Fox</p>
+                    <span class="card-btn">Mula Belajar</span>
+                </a>
+            </div>
+        </div>
 
-        <a href="sains-darjah2/index.html" class="card sains">
-            <div class="card-icon">🦊</div>
-            <h2>Sains</h2>
-            <p>Kad nota interaktif &amp; kuiz Sains Darjah 2 bersama Fox</p>
-            <span class="card-btn">Mula Belajar</span>
-        </a>
+        <!-- JAIS Section -->
+        <div class="category-section">
+            <div class="category-header">
+                <h2><span class="cat-icon">🕌</span>Sekolah Rendah Agama (SRA)</h2>
+                <p>Silibus Jabatan Agama Islam Selangor (JAIS)</p>
+            </div>
+            <div class="cards-container" style="padding: 0;">
+                <a href="bahasa-arab.html" class="card arab">
+                    <div class="card-icon">🕌</div>
+                    <h2>Bahasa Arab</h2>
+                    <p>Nota &amp; kuiz Bahasa Arab KAFA Darjah 2</p>
+                    <span class="card-btn">Mula Belajar</span>
+                </a>
 
-        <a href="tauhid.html" class="card tauhid">
-            <div class="card-icon">📗</div>
-            <h2>Tauhid</h2>
-            <p>Nota &amp; kuiz Tauhid KAFA Darjah 2 (Negeri Selangor)</p>
-            <span class="card-btn">Mula Belajar</span>
-        </a>
+                <a href="tauhid.html" class="card tauhid">
+                    <div class="card-icon">📗</div>
+                    <h2>Tauhid</h2>
+                    <p>Nota &amp; kuiz Tauhid KAFA Darjah 2</p>
+                    <span class="card-btn">Mula Belajar</span>
+                </a>
+            </div>
+            <div class="disclaimer">
+                *Nota: Silibus SRA adalah mengikut ketetapan Jabatan Agama Islam Selangor (JAIS). Sukatan bagi negeri lain mungkin berbeza.
+            </div>
+        </div>
     </div>
 
     <!-- Feedback floating button -->

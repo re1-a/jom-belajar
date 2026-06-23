@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Pantas Tauhid Tahun 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --primary-light: #ede9fe;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --border: #ddd6fe;
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            display: flex;
+            justify-content: center;
+        }
+
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin: 20mm auto;
+            padding: 15mm;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--primary-dark);
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            margin: 5px 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .section {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            break-inside: avoid;
+        }
+
+        .section-title {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: -6px -6px 12px -6px;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        /* Tables for layout */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        th, td {
+            padding: 6px;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: top;
+        }
+
+        th {
+            text-align: left;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        /* Sifat Table Specifics */
+        .sifat-table td:first-child { font-weight: 700; color: var(--primary-dark); width: 25%; }
+        .sifat-table td:nth-child(2) { width: 35%; }
+        .sifat-table td:last-child { color: #dc2626; width: 40%; font-size: 11px; }
+
+        /* Malaikat Table Specifics */
+        .malaikat-table td:first-child { font-weight: 700; color: var(--primary-dark); width: 30%; }
+
+        /* Kitab Table Specifics */
+        .kitab-table td:first-child { font-weight: 700; color: var(--primary-dark); width: 35%; }
+        .kitab-table td:last-child { font-weight: 600; }
+
+        .list-box {
+            font-size: 12px;
+            margin: 0;
+            padding-left: 18px;
+            color: var(--text-muted);
+        }
+        
+        .list-box li { margin-bottom: 4px; }
+
+        .footer {
+            position: absolute;
+            bottom: 10mm;
+            left: 15mm;
+            right: 15mm;
+            text-align: center;
+            font-size: 10px;
+            color: #9ca3af;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 5px;
+        }
+
+        /* Print Settings */
+        @media print {
+            body { background: white; margin: 0; padding: 0; display: block; }
+            .a4-page { margin: 0; padding: 10mm; box-shadow: none; width: 100%; height: 100%; }
+            .footer { bottom: 5mm; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="a4-page">
+        <div class="header">
+            <h1>Nota Pantas Tauhid (Tahun 2)</h1>
+            <p>Rujukan Cepat Sebelum Peperiksaan • Silibus JAIS</p>
+        </div>
+
+        <div class="grid-container">
+            
+            <!-- KIRI: Sifat Allah -->
+            <div class="section" style="grid-column: span 2;">
+                <div class="section-title">Pelajaran 1: Sifat-Sifat Allah SWT</div>
+                <table class="sifat-table">
+                    <tr>
+                        <th>Sifat Wajib</th>
+                        <th>Maksud</th>
+                        <th>Sifat Mustahil (Lawan)</th>
+                    </tr>
+                    <tr>
+                        <td>Qidam (قِدَمٌ)</td>
+                        <td>Sedia ada. Tiada permulaan bagi-Nya.</td>
+                        <td>Hudus (حُدُوثٌ) — Baharu / Ada permulaan</td>
+                    </tr>
+                    <tr>
+                        <td>Baqa' (بَقَاءٌ)</td>
+                        <td>Kekal. Tidak akan binasa.</td>
+                        <td>Fanaa' (فَنَاءٌ) — Binasa</td>
+                    </tr>
+                    <tr>
+                        <td>Mukhalafatuhu lil-Hawadith</td>
+                        <td>Berbeza dengan makhluk (yang baharu).</td>
+                        <td>Mumathalatuhu lil-Hawadith — Menyerupai makhluk</td>
+                    </tr>
+                    <tr>
+                        <td>Qiyamuhu binafsihi</td>
+                        <td>Berdiri sendiri. Tidak perlukan bantuan.</td>
+                        <td>Qiyamuhu bighairihi — Bergantung pada yang lain</td>
+                    </tr>
+                    <tr>
+                        <td>Wahdaniyyah (وَحْدَانِيَّةٌ)</td>
+                        <td>Esa / Tunggal. Satu pada zat, sifat & perbuatan.</td>
+                        <td>Ta'addud (تَعَدُّدٌ) — Berbilang-bilang</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- KANAN ATAS: Malaikat -->
+            <div class="section">
+                <div class="section-title">Pelajaran 2: Beriman Kepada Malaikat</div>
+                <p style="font-size: 11px; margin: 0 0 8px; color: var(--text-muted);">Malaikat dicipta daripada <strong>cahaya (nur)</strong>. Tidak berjantina, tidak makan, minum & tidur. Wajib diimani.</p>
+                <table class="malaikat-table">
+                    <tr>
+                        <th>Nama</th>
+                        <th>Tugas Utama</th>
+                    </tr>
+                    <tr>
+                        <td>1. Jibril</td>
+                        <td>Menyampaikan wahyu.</td>
+                    </tr>
+                    <tr>
+                        <td>2. Mikail</td>
+                        <td>Mengurus rezeki & hujan.</td>
+                    </tr>
+                    <tr>
+                        <td>3. Israfil</td>
+                        <td>Meniup sangkakala (kiamat).</td>
+                    </tr>
+                    <tr>
+                        <td>4. Izrail</td>
+                        <td>Mencabut nyawa makhluk.</td>
+                    </tr>
+                    <tr>
+                        <td>5. Raqib</td>
+                        <td>Mencatat amalan <strong>baik</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>6. Atid</td>
+                        <td>Mencatat amalan <strong>buruk</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>7. Munkar</td>
+                        <td rowspan="2" style="vertical-align: middle;">Menyoal orang mati dalam kubur.</td>
+                    </tr>
+                    <tr>
+                        <td>8. Nakir</td>
+                    </tr>
+                    <tr>
+                        <td>9. Ridzwan</td>
+                        <td>Menjaga pintu <strong>syurga</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td>10. Malik</td>
+                        <td>Menjaga pintu <strong>neraka</strong>.</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- KANAN BAWAH: Kitab & Fakta -->
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="section">
+                    <div class="section-title">Pelajaran 3: Beriman Kepada Kitab</div>
+                    <p style="font-size: 11px; margin: 0 0 8px; color: var(--text-muted);">Kitab adalah kalam Allah yang diturunkan kepada Rasul sebagai panduan. Terdapat <strong>4</strong> kitab wajib.</p>
+                    <table class="kitab-table">
+                        <tr>
+                            <th>Nama Kitab</th>
+                            <th>Diturunkan kepada</th>
+                        </tr>
+                        <tr>
+                            <td>1. Taurat</td>
+                            <td>Nabi Musa AS</td>
+                        </tr>
+                        <tr>
+                            <td>2. Zabur</td>
+                            <td>Nabi Daud AS</td>
+                        </tr>
+                        <tr>
+                            <td>3. Injil</td>
+                            <td>Nabi Isa AS</td>
+                        </tr>
+                        <tr>
+                            <td>4. Al-Quran</td>
+                            <td>Nabi Muhammad SAW</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="section" style="flex-grow: 1;">
+                    <div class="section-title">💡 Fakta Pantas (Soalan Lazim)</div>
+                    <ul class="list-box">
+                        <li>Rukun Iman ada <strong>6</strong> perkara.</li>
+                        <li>Beriman kepada Malaikat ialah Rukun Iman ke-<strong>2</strong>.</li>
+                        <li>Beriman kepada Kitab ialah Rukun Iman ke-<strong>3</strong>.</li>
+                        <li>Manusia dicipta dari <strong>tanah/air mani</strong>, malaikat dari <strong>cahaya</strong>.</li>
+                        <li><strong>Al-Quran</strong> adalah pelengkap/penyempurna kitab-kitab sebelumnya.</li>
+                        <li>Suhuf dari segi bahasa bermaksud <strong>Lembaran</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            Disediakan khas untuk ulang kaji pantas • Portal Pembelajaran Bijak KAFA
+        </div>
+    </div>
+
+</body>
+</html>
