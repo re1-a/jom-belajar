@@ -31,69 +31,82 @@
             background: white;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             margin: 20mm auto;
-            padding: 10mm;
+            padding: 8mm;
             box-sizing: border-box;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             text-align: center;
             border-bottom: 2px solid var(--primary);
-            padding-bottom: 6px;
-            margin-bottom: 10px;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .header h1 {
             margin: 0;
             color: var(--primary-dark);
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .header p {
-            margin: 3px 0 0;
+            margin: 2px 0 0;
             color: var(--text-muted);
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
         }
 
         .grid-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 6px;
+            flex-grow: 1;
         }
 
         .section {
             background: white;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 8px;
             break-inside: avoid;
+            display: flex;
+            flex-direction: column;
         }
 
         .section-title {
             background: var(--primary-light);
             color: var(--primary-dark);
-            padding: 6px 10px;
-            border-radius: 6px;
-            margin: -4px -4px 8px -4px;
-            font-size: 14px;
+            padding: 4px 6px;
+            border-radius: 4px;
+            margin: -2px -2px 6px -2px;
+            font-size: 12px;
             font-weight: 700;
             text-align: center;
             border: 1px solid var(--border);
         }
 
+        p.subtitle {
+            font-size: 9px;
+            margin: 0 0 4px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 11px;
+            font-size: 10px;
+            margin-bottom: 4px;
         }
 
         th, td {
-            padding: 5px;
+            padding: 3px;
             border-bottom: 1px solid #f3f4f6;
             vertical-align: top;
         }
@@ -102,35 +115,36 @@
             text-align: left;
             color: var(--primary-dark);
             font-weight: 600;
-            font-size: 12px;
+            font-size: 10px;
         }
 
         tr:last-child td { border-bottom: none; }
 
         .list-box {
-            font-size: 11px;
-            margin: 0;
+            font-size: 10px;
+            margin: 0 0 4px 0;
             padding-left: 14px;
             color: var(--text-muted);
         }
         
-        .list-box li { margin-bottom: 3px; }
+        .list-box li { margin-bottom: 2px; }
+
+        strong.hl {
+            color: var(--primary-dark);
+        }
 
         .footer {
-            position: absolute;
-            bottom: 6mm;
-            left: 10mm;
-            right: 10mm;
             text-align: center;
             font-size: 9px;
             color: #9ca3af;
             border-top: 1px solid #e5e7eb;
-            padding-top: 5px;
+            padding-top: 4px;
+            margin-top: 6px;
         }
 
         @media print {
             body { background: white; margin: 0; padding: 0; display: block; }
-            .a4-page { margin: 0; padding: 10mm; box-shadow: none; width: 100%; height: 100%; }
+            .a4-page { margin: 0; padding: 8mm; box-shadow: none; width: 100%; height: 100%; }
         }
     </style>
 </head>
@@ -144,38 +158,85 @@
 
         <div class="grid-container">
             
-            <!-- KIRI ATAS: Najis -->
-            <div class="section" style="grid-column: span 2;">
-                <div class="section-title">Pelajaran 1: Najis (نجيس)</div>
-                <p style="font-size: 10px; margin: 0 0 6px; color: var(--text-muted);">Sesuatu benda kotor yang menghalang sahnya ibadat seperti solat & tawaf.</p>
+            <!-- ISTINJAK -->
+            <div class="section">
+                <div class="section-title">Istinjak (إستنجاء)</div>
+                <p class="subtitle">Membersihkan qubul/dubur selepas membuang air.</p>
+                <ul class="list-box">
+                    <li><strong>Hukum:</strong> Wajib.</li>
+                    <li><strong>Alat Utama:</strong> Air Mutlak.</li>
+                    <li><strong>Alat Tambahan:</strong> Benda kesat (Batu, daun kering, kertas tisu).</li>
+                    <li><strong>Alat Haram:</strong> Makanan, tulang, kertas ayat Quran, benda licin (kaca/plastik).</li>
+                </ul>
+                <strong class="hl" style="font-size:10px;">Syarat Guna Benda Kesat:</strong>
+                <ul class="list-box">
+                    <li>Najis belum kering & tidak merebak.</li>
+                    <li>Sapu minima 3 kali (atau 3 bucu batu).</li>
+                </ul>
+                <strong class="hl" style="font-size:10px;">Adab Tandas:</strong>
+                <ul class="list-box">
+                    <li>Masuk kaki Kiri, keluar kaki Kanan.</li>
+                    <li>Jangan bercakap, menyanyi atau makan.</li>
+                </ul>
+            </div>
+
+            <!-- WUDUK -->
+            <div class="section">
+                <div class="section-title">Wuduk (وضوء)</div>
+                <p class="subtitle">Membersihkan anggota tertentu dengan air mutlak.</p>
+                <ul class="list-box">
+                    <li><strong>Hukum Wajib:</strong> Solat, tawaf, sentuh al-Quran.</li>
+                    <li><strong>Hukum Sunat:</strong> Tidur, baca Quran (tanpa sentuh).</li>
+                </ul>
+                <strong class="hl" style="font-size:10px;">6 Rukun Wuduk (Wajib):</strong>
+                <ol class="list-box" style="margin-left: 10px;">
+                    <li>Niat: <em>"Nawaitul wudu'a lillahi taala"</em></li>
+                    <li>Membasuh Muka.</li>
+                    <li>Membasuh Tangan hingga siku.</li>
+                    <li>Menyapu sedikit air ke Kepala.</li>
+                    <li>Membasuh Kaki hingga buku lali.</li>
+                    <li>Tertib (Ikut urutan).</li>
+                </ol>
+                <strong class="hl" style="font-size:10px;">Batal Wuduk:</strong>
+                <ul class="list-box">
+                    <li>Keluar sesuatu dari dubur/qubul.</li>
+                    <li>Tidur baring (tidak tetap punggung) / Hilang akal.</li>
+                    <li>Sentuh kulit bukan mahram / sentuh kemaluan.</li>
+                </ul>
+            </div>
+
+            <!-- NAJIS -->
+            <div class="section">
+                <div class="section-title">Najis (نجيس)</div>
+                <p class="subtitle">Benda kotor yang menghalang sahnya ibadat.</p>
                 <table>
                     <tr>
-                        <th style="width: 25%">Bahagian Najis</th>
-                        <th style="width: 35%">Maksud / Contoh</th>
-                        <th style="width: 40%">Cara Menyucikan</th>
+                        <th style="width: 30%">Jenis</th>
+                        <th style="width: 40%">Maksud/Contoh</th>
+                        <th style="width: 30%">Cara Suci</th>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold; color: var(--primary-dark);">1. Mukhaffafah (Ringan)</td>
-                        <td>Kencing bayi lelaki <2 tahun (minum susu ibu sahaja).</td>
-                        <td>Renjis air mutlak ke tempat najis selepas dilap kering.</td>
+                        <td class="hl" style="font-weight:bold;">1. Mukhaffafah (Ringan)</td>
+                        <td>Kencing bayi lelaki <2 tahun (minum susu ibu shj).</td>
+                        <td>Renjis air mutlak (lepas dilap kering).</td>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold; color: var(--primary-dark);">2. Mutawassitah (Pertengahan)</td>
+                        <td class="hl" style="font-weight:bold;">2. Mutawassitah (Sederhana)</td>
                         <td>Darah, nanah, muntah, arak, tahi.</td>
-                        <td>Hilangkan najis (ain), basuh dengan air mutlak hingga hilang bau, warna & rasa.</td>
+                        <td>Basuh air mutlak (hilang bau, warna, rasa).</td>
                     </tr>
                     <tr>
-                        <td style="font-weight: bold; color: var(--primary-dark);">3. Mughallazah (Berat)</td>
+                        <td class="hl" style="font-weight:bold;">3. Mughallazah (Berat)</td>
                         <td>Anjing, babi & keturunannya.</td>
                         <td>Sertu: 1x air tanah, 6x air mutlak.</td>
                     </tr>
                 </table>
             </div>
 
-            <!-- KIRI: Hadas -->
-            <div class="section" style="grid-column: span 2;">
-                <div class="section-title">Pelajaran 2: Hadas (حدث)</div>
-                <p style="font-size: 10px; margin: 0 0 6px; color: var(--text-muted);">Keadaan tidak suci yang menyebabkan tidak sah ibadat.</p>
+            <!-- HADAS -->
+            <div class="section">
+                <div class="section-title">Hadas (حدث)</div>
+                <p class="subtitle">Keadaan tidak suci (tidak sah ibadat).</p>
                 <table>
                     <tr>
                         <th style="width: 50%">Hadas Kecil</th>
@@ -183,72 +244,60 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Sebab:</strong>
                             <ul class="list-box">
-                                <li>Keluar sesuatu dari qubul/dubur.</li>
-                                <li>Hilang akal (gila, mabuk, pengsan).</li>
-                                <li>Bersentuh kulit lelaki & wanita bukan mahram tanpa lapik.</li>
+                                <li>Kentut / Kencing.</li>
+                                <li>Hilang akal / Tidur baring.</li>
+                                <li>Sentuh bukan mahram.</li>
                             </ul>
                         </td>
                         <td>
-                            <strong>Sebab:</strong>
                             <ul class="list-box">
-                                <li>Keluar haid / nifas / wiladah.</li>
+                                <li>Haid / Nifas / Wiladah.</li>
                                 <li>Jima' (bersetubuh).</li>
-                                <li>Keluar air mani.</li>
+                                <li>Mati (kecuali syahid).</li>
                             </ul>
                         </td>
                     </tr>
                     <tr>
-                        <td><strong>Cara suci:</strong> Wuduk atau Tayamum</td>
-                        <td><strong>Cara suci:</strong> Mandi Wajib</td>
+                        <td><strong class="hl">Cara suci:</strong> Wuduk</td>
+                        <td><strong class="hl">Cara suci:</strong> Mandi Wajib</td>
                     </tr>
                 </table>
             </div>
 
-            <!-- KIRI BAWAH: Mandi Wajib -->
+            <!-- MANDI WAJIB -->
             <div class="section">
-                <div class="section-title">Pelajaran 3: Mandi Wajib</div>
-                <p style="font-size: 10px; margin: 0 0 6px; color: var(--text-muted);">Wajib untuk mengharuskan ibadat.</p>
+                <div class="section-title">Mandi Wajib</div>
+                <p class="subtitle">Wajib untuk menyucikan hadas besar.</p>
                 
-                <strong>Rukun Mandi Wajib (Ada 2 sahaja):</strong>
-                <ul class="list-box" style="margin-bottom: 8px;">
-                    <li>1. Niat: <em>"Sahaja aku mengangkat hadas besar kerana Allah Taala."</em></li>
-                    <li>2. Meratakan air ke seluruh badan (kulit & bulu).</li>
+                <strong class="hl" style="font-size:10px;">2 Rukun Mandi Wajib:</strong>
+                <ul class="list-box">
+                    <li><strong>1. Niat:</strong> <em>"Sahaja aku mengangkat hadas besar..."</em> (Dibaca ketika air mula mengenai badan).</li>
+                    <li><strong>2. Meratakan air:</strong> Ke seluruh anggota badan (kulit & bulu/rambut).</li>
                 </ul>
 
-                <strong>Dilarang ketika berhadas besar:</strong>
+                <strong class="hl" style="font-size:10px;">Haram Ketika Berhadas Besar:</strong>
                 <ul class="list-box">
                     <li>Solat & Tawaf.</li>
-                    <li>Menyentuh/membaca Al-Quran.</li>
-                    <li>Berada di dalam masjid.</li>
+                    <li>Menyentuh/membawa Al-Quran.</li>
+                    <li>Duduk di dalam masjid.</li>
                 </ul>
             </div>
 
-            <!-- KANAN BAWAH: Mandi Sunat -->
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <div class="section">
-                    <div class="section-title">Pelajaran 4: Mandi Sunat</div>
-                    <p style="font-size: 10px; margin: 0 0 6px; color: var(--text-muted);">Dapat pahala jika dibuat, tidak berdosa jika tinggal.</p>
-                    
-                    <strong>Contoh Mandi Sunat:</strong>
-                    <ul class="list-box">
-                        <li>Hari Jumaat.</li>
-                        <li>Dua Hari Raya (Aidilfitri & Aidiladha).</li>
-                        <li>Sebelum berihram / Gerhana.</li>
-                        <li>Selepas memandikan jenazah / Masuk Islam.</li>
-                    </ul>
-                </div>
-
-                <div class="section" style="flex-grow: 1;">
-                    <div class="section-title">💡 Fakta Pantas</div>
-                    <ul class="list-box">
-                        <li>Sertu: 1x air tanah + 6x air mutlak.</li>
-                        <li>Niat mandi wajib mesti dibuat ketika <strong>air mula kena badan</strong>.</li>
-                        <li>Darah dan nanah adalah najis <strong>Mutawassitah</strong>.</li>
-                        <li>Mandi wajib bagi wanita haid/nifas adalah kerana <strong>Hadas Besar</strong>.</li>
-                    </ul>
-                </div>
+            <!-- MANDI SUNAT -->
+            <div class="section">
+                <div class="section-title">Mandi Sunat</div>
+                <p class="subtitle">Dapat pahala jika dibuat, tidak berdosa jika ditinggal.</p>
+                
+                <strong class="hl" style="font-size:10px;">Contoh Mandi Sunat:</strong>
+                <ul class="list-box">
+                    <li>Pagi hari Jumaat (sebelum solat Jumaat).</li>
+                    <li>Pagi Hari Raya (Aidilfitri & Aidiladha).</li>
+                    <li>Sebelum memakai ihram Haji / Umrah.</li>
+                    <li>Ketika gerhana matahari / bulan.</li>
+                    <li>Selepas menguruskan jenazah.</li>
+                    <li>Apabila memeluk agama Islam.</li>
+                </ul>
             </div>
 
         </div>
