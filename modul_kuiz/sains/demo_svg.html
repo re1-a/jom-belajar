@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prebiu SVG Ikon</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a2e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .icon-box {
+            background-color: #262640;
+            padding: 20px 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 2px solid #363650;
+        }
+        .icon-box svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 15px;
+        }
+        .label {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4cd137;
+        }
+        .btn {
+            background-color: #4cd137;
+            color: #1a1a2e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prebiu Ikon Lukisan Kod (SVG)</h1>
+    <p>Ini adalah contoh ikon yang dilukis menggunakan 100% kod matematik (tanpa perlu *download* atau guna AI). Sangat tajam dan pantas!</p>
+    
+    <div class="container">
+        <div class="icon-box">
+            <!-- SVG Mata -->
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 10 50 Q 50 10 90 50 Q 50 90 10 50 Z" fill="white" stroke="#ecf0f1" stroke-width="4" stroke-linejoin="round"/>
+              <circle cx="50" cy="50" r="20" fill="#0984e3" stroke="#ecf0f1" stroke-width="2"/>
+              <circle cx="50" cy="50" r="8" fill="#2d3436"/>
+              <circle cx="45" cy="45" r="4" fill="white"/>
+            </svg>
+            <div class="label">Melihat</div>
+        </div>
+
+        <div class="icon-box">
+            <!-- SVG Telinga -->
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 45 20 C 75 10, 85 40, 80 60 C 75 80, 55 90, 45 85 C 35 80, 30 60, 40 50 C 50 40, 45 30, 45 20 Z" fill="#ffeaa7" stroke="#fdcb6e" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M 55 30 C 65 30, 70 45, 65 55" fill="none" stroke="#fab1a0" stroke-width="4" stroke-linecap="round"/>
+              <path d="M 60 50 C 55 50, 50 55, 50 60" fill="none" stroke="#fab1a0" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <div class="label">Mendengar</div>
+        </div>
+
+        <div class="icon-box">
+            <!-- SVG Tangan -->
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <!-- Tapak Tangan -->
+              <rect x="35" y="45" width="40" height="40" rx="10" fill="#ffeaa7" stroke="#fdcb6e" stroke-width="4" />
+              <!-- Jari Telunjuk -->
+              <rect x="35" y="15" width="15" height="40" rx="7.5" fill="#ffeaa7" stroke="#fdcb6e" stroke-width="4" />
+              <!-- Jari Tengah -->
+              <rect x="50" y="40" width="12" height="20" rx="6" fill="#ffeaa7" stroke="#fdcb6e" stroke-width="4" />
+              <!-- Jari Manis -->
+              <rect x="62" y="45" width="12" height="20" rx="6" fill="#ffeaa7" stroke="#fdcb6e" stroke-width="4" />
+              <!-- Ibu Jari -->
+              <path d="M 35 60 C 20 60, 20 45, 30 45" fill="none" stroke="#ffeaa7" stroke-width="12" stroke-linecap="round" />
+            </svg>
+            <div class="label">Menyentuh</div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 40px;">
+        <p style="text-align:center;">Contoh Rupa Di Dalam Butang (Boleh diklik):</p>
+        <button class="btn">
+            <svg viewBox="0 0 100 100" style="width: 30px; height: 30px;" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 10 50 Q 50 10 90 50 Q 50 90 10 50 Z" fill="white" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+              <circle cx="50" cy="50" r="20" fill="#0984e3" stroke="#2d3436" stroke-width="2"/>
+              <circle cx="50" cy="50" r="8" fill="#2d3436"/>
+              <circle cx="45" cy="45" r="4" fill="white"/>
+            </svg>
+            Melihat
+        </button>
+    </div>
+</body>
+</html>

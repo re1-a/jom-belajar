@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mission Control</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <h1>[MISSION_CONTROL]</h1>
+        <div class="status-indicator">
+          <span class="dot pulse"></span>
+          <span>SYSTEM ONLINE</span>
+        </div>
+      </header>
+      
+      <main class="grid-bento">
+        <!-- Task Tracker -->
+        <section class="glass-panel task-tracker">
+          <div class="panel-header">
+            <h2>> TASK_TRACKER</h2>
+            <button id="refresh-tracker" class="icon-btn">⟳</button>
+          </div>
+          <div class="panel-content" id="tracker-content">
+            <div class="loading">Fetching data...</div>
+          </div>
+        </section>
+
+        <!-- Audit Log -->
+        <section class="glass-panel audit-log">
+          <div class="panel-header">
+            <h2>> AUDIT_LOG</h2>
+            <button id="refresh-audit" class="icon-btn">⟳</button>
+          </div>
+          <div class="panel-content terminal" id="audit-content">
+            <div class="loading">Fetching data...</div>
+          </div>
+        </section>
+
+        <!-- The Inbox -->
+        <section class="glass-panel inbox" style="display: flex; flex-direction: column;">
+          <div class="panel-header">
+            <h2>> THE_INBOX</h2>
+          </div>
+          <div class="panel-content" id="inbox-content" style="flex: 1; overflow-y: auto; margin-bottom: 10px;">
+            <div class="loading">Fetching data...</div>
+          </div>
+          <div class="inbox-input-area">
+            <textarea id="inbox-textarea" placeholder="Taip idea di sini..." rows="3"></textarea>
+            <button id="inbox-submit" class="cyber-btn">[+] APPEND</button>
+          </div>
+        </section>
+
+        <!-- Approval Hub -->
+        <section class="glass-panel approval-hub">
+          <div class="panel-header">
+            <h2>> APPROVAL_HUB</h2>
+            <button id="refresh-plan" class="icon-btn">⟳</button>
+          </div>
+          <div class="panel-content markdown-body" id="plan-content">
+            <div class="loading">Fetching data...</div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

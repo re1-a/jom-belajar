@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <!-- zoom ALLOWED (accessibility) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sains Explorer ⭐ Pengembaraan Sains Darjah 2</title>
+    <link rel="stylesheet" href="css/theme.css">
+</head>
+<body>
+
+    <!-- ================= SCREEN: MAP ================= -->
+    <div id="screen-map" class="screen active">
+        <div class="top-hud">
+            <div class="streak-counter">🔥 <span id="streak-count">0</span></div>
+            <div class="progress-wrapper"><div class="progress-fill" id="progress-fill"></div></div>
+            <button class="btn-sound" id="sound-toggle" title="Bunyi" aria-label="Hidup/matikan bunyi">🔊</button>
+        </div>
+
+        <div class="mascot">
+            <div class="face">🤖</div>
+            <div class="bubble" id="mascot-text">Hai! Saya Boti. Jom terokai pulau sains!</div>
+        </div>
+
+        <div class="map-wrapper">
+            <h1 class="map-title" id="map-title">🗺️ Sains Explorer</h1>
+            <p class="map-subtitle">Tekan pulau untuk mula misi!</p>
+            <div class="trail" id="island-trail"></div>
+
+            <div class="badges-section">
+                <h3>🏅 Lencana Saya</h3>
+                <div class="badge-row" id="badge-row"></div>
+            </div>
+
+            <a href="../index.html" class="footer-link">⬅️ Kembali ke Menu Utama</a>
+            <div class="version-text">v2.0.0 · Sains Explorer</div>
+        </div>
+    </div>
+
+    <!-- ================= SCREEN: QUIZ ================= -->
+    <div id="screen-quiz" class="screen">
+        <div class="top-hud">
+            <div class="streak-counter">🔥 <span id="streak-count-quiz">0</span></div>
+            <div class="progress-wrapper"><div class="progress-fill" id="progress-fill-quiz"></div></div>
+            <button class="btn-sound" id="sound-toggle-quiz" title="Bunyi">🔊</button>
+        </div>
+
+        <div class="quiz-wrapper">
+            <div class="quiz-header">
+                <button class="btn-back" onclick="goToMap()">⬅️ Kembali</button>
+                <span class="quiz-progress-text" id="quiz-progress">1 / 5</span>
+            </div>
+
+            <div class="quiz-question-card" id="question-card">
+                <button class="btn-read" id="btn-read-q" title="Dengar soalan">🔊</button>
+                <span class="q-type-label" id="q-type-label">Soalan</span>
+                <span class="emoji-big" id="q-emoji">🔬</span>
+                <p class="question-text" id="q-text">Soalan akan muncul di sini...</p>
+                <div class="tf-statement" id="q-statement" style="display:none;"></div>
+            </div>
+
+            <div id="options-container"></div>
+
+            <div class="quiz-feedback" id="quiz-feedback">
+                <div class="feedback-emoji" id="fb-emoji"></div>
+                <div class="feedback-msg" id="fb-msg"></div>
+                <div class="explanation">
+                    <span class="ex-read" id="ex-read" title="Dengar penerangan">🔊</span>
+                    <span id="fb-explain"></span>
+                </div>
+                <button class="btn-next" id="btn-next" onclick="nextQuestion()">Seterusnya ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SUMMARY MODAL ================= -->
+    <div class="modal-overlay" id="summary-modal">
+        <div class="modal-box">
+            <div style="font-size:3rem;" id="summary-emoji">🎉</div>
+            <h2 id="summary-title">Tahniah!</h2>
+            <div class="stars-big" id="summary-stars">⭐⭐⭐</div>
+            <div class="score-big" id="summary-score">80%</div>
+            <p id="summary-msg" style="color:var(--text-soft);">Anda hebat!</p>
+            <div class="modal-actions">
+                <button class="btn-next" onclick="replayQuiz()">🔄 Cuba Lagi</button>
+                <button class="btn-secondary" onclick="goToMap()">🗺️ Kembali ke Peta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SCRIPTS ================= -->
+    <!-- Content (salinan tempatan supaya app self-contained; asal di ../sains-darjah2/ tak disentuh): -->
+    <script src="js/notes_data.js"></script>
+    <!-- Optional natural voice clips (created by generate_sains_audio.py). Safe if missing. -->
+    <script src="js/sains_audio_db.js" onerror="console.info('Tiada audio pra-jana — guna suara browser.')"></script>
+    <!-- Engine + audio -->
+    <script src="js/engine.js"></script>
+    <script src="js/audio.js"></script>
+
+    <script>
+        // ====== STATE ======
+        let currentUnitId = '', quizData = [], quizIndex = 0, quizCorrect = 0, answered = false;
+
+        const MASCOT_HI = ['Hai! Saya Boti. Jom terokai pulau sains!', 'Sedia untuk pengembaraan hari ini? 🚀', 'Pilih satu pulau dan kita mula!'];
+        const MASCOT_GOOD = ['Wah, hebatnya! 🎉', 'Betul! Kamu memang bijak!', 'Yeay! Teruskan! ⭐', 'Pandai! 👏'];
+        const MASCOT_TRY  = ['Tak apa, cuba lagi ya! 💪', 'Hampir betul! Jangan putus asa.', 'Belajar daripada silap itu bagus!'];
+
+        function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+        function setMascot(t){ const el=document.getElementById('mascot-text'); if(el) el.textContent=t; }
+
+        // ====== INIT ======
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = checkStreak();
+            renderMap(state); renderBadges(state); updateHUD(state);
+            setMascot(pick(MASCOT_HI));
+            initSoundToggles();
+
+            // hidden parent dashboard: tap title 5x
+            let taps=0, timer;
+            document.getElementById('map-title').addEventListener('click', () => {
+                taps++; clearTimeout(timer);
+                if (taps>=5){ const pin=prompt('Masukkan PIN Ibu Bapa:'); if(pin==='1234') location.href='parent-dashboard.html'; else if(pin!==null) alert('PIN Salah.'); taps=0; }
+                else timer=setTimeout(()=>taps=0,2000);
+            });
+
+            // read question / explanation buttons
+            document.getElementById('btn-read-q').addEventListener('click', () => {
+                const q = quizData[quizIndex]; if(q) AudioFX.speak(q.speak);
+            });
+            document.getElementById('ex-read').addEventListener('click', () => {
+                AudioFX.speak(document.getElementById('fb-explain').textContent);
+            });
+        });
+
+        function initSoundToggles(){
+            document.querySelectorAll('[id^="sound-toggle"]').forEach(btn => {
+                btn.textContent = AudioFX.isOn() ? '🔊' : '🔇';
+                btn.classList.toggle('off', !AudioFX.isOn());
+                btn.addEventListener('click', () => {
+                    const on = AudioFX.toggle();
+                    document.querySelectorAll('[id^="sound-toggle"]').forEach(b => {
+                        b.textContent = on ? '🔊' : '🔇'; b.classList.toggle('off', !on);
+                    });
+                });
+            });
+        }
+
+        // ====== MAP ======
+        function renderMap(state) {
+            const trail = document.getElementById('island-trail'); trail.innerHTML='';
+            UNITS.forEach((unit, idx) => {
+                const status = getUnitStatus(unit.id);
+                const score = state.quizScores[unit.id];
+                const stars = score ? starsFor(score.best) : 0;
+                const starStr = score ? ('⭐'.repeat(stars) + '☆'.repeat(3-stars)) : '';
+
+                const card = document.createElement('div');
+                card.className = `island ${status}`;
+                card.style.setProperty('--accent', unit.color);
+                card.innerHTML = `
+                    <div class="island-header">
+                        <div class="island-emoji">${unit.emoji}</div>
+                        <div class="island-info">
+                            <h3>${unit.island}</h3>
+                            <p>${unit.name}${score ? ' · '+score.best+'%' : ''}</p>
+                            ${starStr ? `<div class="stars">${starStr}</div>` : ''}
+                        </div>
+                    </div>`;
+                if (status !== 'locked') card.addEventListener('click', () => startQuiz(unit.id));
+                else card.addEventListener('click', () => {
+                    card.style.animation='none'; void card.offsetHeight; card.style.animation='shake .3s ease';
+                    setMascot('Pulau ini berkunci. Habiskan pulau sebelum ni dulu! 🔒');
+                });
+                trail.appendChild(card);
+                if (idx < UNITS.length-1){ const d=document.createElement('div'); d.className='trail-dot'; trail.appendChild(d); }
+            });
+        }
+
+        function renderBadges(state) {
+            const row = document.getElementById('badge-row'); row.innerHTML='';
+            UNITS.forEach(unit => {
+                const on = state.badges.includes(unit.badge);
+                const i = document.createElement('div');
+                i.className = `badge-item ${on?'unlocked':''}`;
+                i.innerHTML = `<span class="emoji">${unit.badge}</span><span>${unit.name.split(' ')[0]}</span>`;
+                row.appendChild(i);
+            });
+        }
+        function updateHUD(state){
+            document.querySelectorAll('[id^="streak-count"]').forEach(e=>e.textContent=state.streak);
+            document.querySelectorAll('[id^="progress-fill"]').forEach(e=>e.style.width=state.totalProgress+'%');
+        }
+
+        // ====== QUIZ FLOW ======
+        function startQuiz(unitId){
+            currentUnitId=unitId; quizData=generateQuiz(unitId); quizIndex=0; quizCorrect=0;
+            if (!quizData.length){ alert('Soalan untuk unit ini belum tersedia.'); return; }
+            showScreen('screen-quiz'); updateHUD(loadState()); showQuestion();
+        }
+
+        function showQuestion(){
+            if (quizIndex >= quizData.length){ endQuiz(); return; }
+            answered=false;
+            const q=quizData[quizIndex];
+            document.getElementById('quiz-progress').textContent=`${quizIndex+1} / ${quizData.length}`;
+            document.getElementById('q-emoji').textContent=q.emoji;
+            document.getElementById('q-text').textContent=q.question;
+            document.getElementById('quiz-feedback').classList.remove('visible');
+
+            const stmt=document.getElementById('q-statement');
+            const label=document.getElementById('q-type-label');
+            const cont=document.getElementById('options-container'); cont.innerHTML='';
+
+            if (q.type==='emoji'){
+                label.textContent='👆 Pilih gambar yang betul'; stmt.style.display='none';
+                const grid=document.createElement('div'); grid.className='options-emoji';
+                q.options.forEach((opt,i)=>{ const b=document.createElement('button'); b.className='emoji-btn'; b.textContent=opt;
+                    b.addEventListener('click',()=>selectAnswer(i,b)); grid.appendChild(b); });
+                cont.appendChild(grid);
+            } else if (q.type==='tf'){
+                label.textContent='🤔 Betul atau salah?'; stmt.style.display='block'; stmt.textContent=q.statement;
+                const grid=document.createElement('div'); grid.className='options-tf';
+                [['✅','Betul'],['❌','Salah']].forEach((pair,i)=>{ const b=document.createElement('button'); b.className='tf-btn';
+                    b.innerHTML=`<span class="tf-emoji">${pair[0]}</span><span>${pair[1]}</span>`;
+                    b.addEventListener('click',()=>selectAnswer(i,b)); grid.appendChild(b); });
+                cont.appendChild(grid);
+            } else {
+                label.textContent='📖 Pilih jawapan'; stmt.style.display='none';
+                const grid=document.createElement('div'); grid.className='options-grid';
+                q.options.forEach((opt,i)=>{ const b=document.createElement('button'); b.className='option-btn';
+                    b.innerHTML=`<span class="opt-read">🔊</span><span>${opt}</span>`;
+                    b.addEventListener('click',(e)=>{
+                        if(e.target.classList.contains('opt-read')){ AudioFX.speak(opt); return; }
+                        selectAnswer(i,b);
+                    });
+                    grid.appendChild(b); });
+                cont.appendChild(grid);
+            }
+
+            // auto read-aloud the prompt
+            setTimeout(()=>AudioFX.speak(q.speak), 250);
+        }
+
+        function selectAnswer(index, el){
+            if (answered) return; answered=true;
+            const q=quizData[quizIndex];
+            const cls = q.type==='emoji'?'emoji-btn': q.type==='tf'?'tf-btn':'option-btn';
+            const all=document.querySelectorAll('.'+cls);
+            all.forEach(b=>b.classList.add('disabled'));
+            const correct = index===q.correctIndex;
+
+            if (correct){
+                quizCorrect++; el.classList.add('correct');
+                AudioFX.correctChime(); Confetti.burst();
+                document.getElementById('fb-emoji').textContent='🎉';
+                document.getElementById('fb-msg').textContent=pick(MASCOT_GOOD);
+            } else {
+                el.classList.add('wrong'); all[q.correctIndex].classList.add('correct');
+                AudioFX.wrongBuzz();
+                document.getElementById('fb-emoji').textContent='💪';
+                document.getElementById('fb-msg').textContent=pick(MASCOT_TRY);
+            }
+            document.getElementById('fb-explain').textContent=q.explanation;
+            document.getElementById('btn-next').textContent =
+                (quizIndex>=quizData.length-1) ? 'Lihat Keputusan 🏆' : 'Seterusnya ➡️';
+            const fb=document.getElementById('quiz-feedback'); fb.classList.add('visible');
+            setTimeout(()=>AudioFX.speak(q.explanation), 600);
+        }
+
+        function nextQuestion(){ quizIndex++; showQuestion(); }
+
+        function endQuiz(){
+            const total=quizData.length, pct=Math.round((quizCorrect/total)*100);
+            saveQuizScore(currentUnitId, pct);
+            bumpStreakOnActivity();
+            completeUnit(currentUnitId);  // finishing (any score) completes & unlocks next — generous
+
+            const stars=starsFor(pct);
+            let emoji,title,msg,scoreClass;
+            if (pct>=80){ emoji='🏆'; title='Luar Biasa!'; msg='Kamu sangat cemerlang!'; scoreClass='great'; }
+            else if (pct>=60){ emoji='⭐'; title='Bagus!'; msg='Pulau berjaya ditakluk!'; scoreClass='ok'; }
+            else { emoji='💪'; title='Teruskan Usaha!'; msg='Setiap cubaan buat kamu lebih pandai!'; scoreClass='try-again'; }
+
+            document.getElementById('summary-emoji').textContent=emoji;
+            document.getElementById('summary-title').textContent=title;
+            document.getElementById('summary-stars').textContent='⭐'.repeat(stars)+'☆'.repeat(3-stars);
+            const sc=document.getElementById('summary-score'); sc.textContent=pct+'%'; sc.className='score-big '+scoreClass;
+            document.getElementById('summary-msg').textContent=msg+` (${quizCorrect}/${total} betul)`;
+            document.getElementById('summary-modal').classList.add('open');
+            if (pct>=60) Confetti.burst();
+        }
+
+        function replayQuiz(){ document.getElementById('summary-modal').classList.remove('open'); startQuiz(currentUnitId); }
+
+        function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function goToMap(){
+            AudioFX.stop();
+            document.getElementById('summary-modal').classList.remove('open');
+            const state=loadState(); renderMap(state); renderBadges(state); updateHUD(state);
+            setMascot(pick(MASCOT_HI)); showScreen('screen-map');
+        }
+    </script>
+</body>
+</html>

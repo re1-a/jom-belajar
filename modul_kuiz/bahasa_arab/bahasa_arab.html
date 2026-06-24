@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bijak KAFA — Nota Revision Darjah 2</title>
+    <meta name="description" content="Nota revision KAFA Darjah 2 — Lughatul Arabiyyah Selangor">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        
+        /* Modals and Dashboard */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--bg-card); padding: 30px; border-radius: var(--radius); width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: var(--text-secondary); }
+        .score-display { font-size: 24px; font-weight: bold; margin: 20px 0; color: var(--text-primary); }
+        .score-percent { font-size: 48px; font-weight: bold; color: var(--correct); margin-bottom: 30px; }
+        .dashboard-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
+        .dash-tab { padding: 10px 15px; border: none; background: none; font-size: 16px; font-weight: bold; color: var(--text-secondary); cursor: pointer; border-radius: var(--radius-sm); }
+        .dash-tab.active { background: var(--bg-header); color: white; }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .history-table th, .history-table td { border: 1px solid var(--border); padding: 10px; text-align: left; }
+        .history-table th { background: rgba(0,0,0,0.05); }
+        .table-container { overflow-x: auto; max-height: 350px; overflow-y: auto; }
+        .module-status { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 12px; display: inline-block; background: var(--bg-main); color: var(--text-light); border: 1px solid var(--border); }
+        .status-green { background: #C6F6D5; color: #22543D; border-color: #9AE6B4; }
+        .status-yellow { background: #FEFCBF; color: #744210; border-color: #FAF089; }
+        .status-red { background: #FED7D7; color: #742A2A; border-color: #FEB2B2; }
+        [data-theme="dark"] .status-green { background: rgba(72,187,120,0.2); color: #9AE6B4; border-color: rgba(72,187,120,0.5); }
+        [data-theme="dark"] .status-yellow { background: rgba(236,201,75,0.2); color: #FAF089; border-color: rgba(236,201,75,0.5); }
+        [data-theme="dark"] .status-red { background: rgba(245,101,101,0.2); color: #FEB2B2; border-color: rgba(245,101,101,0.5); }
+        @media print { .modal, #btn-dashboard { display: none !important; } }
+        body[data-mode="browse"] .module-status { display: none !important; }
+
+        /* ============================================
+           CSS RESET & BASE
+           ============================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+
+        :root {
+            --bg-main: #FDF6E3;
+            --bg-card: #FFFFFF;
+            --bg-tabs: rgba(255,255,255,0.95);
+            --bg-header: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            --text-primary: #2D3748;
+            --text-secondary: #4A5568;
+            --text-light: #718096;
+            --text-arabic: #1A202C;
+            --text-rumi: #6B46C1;
+            --border: #E2E8F0;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            /* Topic Colors */
+            --color-nombor: #4299E1;
+            --color-nombor-light: #EBF4FF;
+            --color-warna: #ED64A6;
+            --color-warna-light: #FFF0F7;
+            --color-haiwan: #48BB78;
+            --color-haiwan-light: #F0FFF4;
+            --color-sukan: #ED8936;
+            --color-sukan-light: #FFFAF0;
+            --color-pakaian: #9F7AEA;
+            --color-pakaian-light: #FAF5FF;
+            --color-sayur: #38B2AC;
+            --color-sayur-light: #E6FFFA;
+            --color-buah: #F56565;
+            --color-buah-light: #FFF5F5;
+            --color-makanan: #ECC94B;
+            --color-makanan-light: #FFFFF0;
+
+            /* Quiz Colors */
+            --correct: #48BB78;
+            --correct-bg: #C6F6D5;
+            --wrong: #F56565;
+            --wrong-bg: #FED7D7;
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #1A202C;
+            --bg-card: #2D3748;
+            --bg-tabs: rgba(26,32,44,0.95);
+            --bg-header: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+            --text-primary: #F7FAFC;
+            --text-secondary: #E2E8F0;
+            --text-light: #A0AEC0;
+            --text-arabic: #F6E05E;
+            --text-rumi: #B794F4;
+            --border: #4A5568;
+            --shadow: 0 4px 20px rgba(0,0,0,0.5);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.8);
+
+            --color-nombor-light: rgba(66, 153, 225, 0.15);
+            --color-warna-light: rgba(237, 100, 166, 0.15);
+            --color-haiwan-light: rgba(72, 187, 120, 0.15);
+            --color-sukan-light: rgba(237, 137, 54, 0.15);
+            --color-pakaian-light: rgba(159, 122, 234, 0.15);
+            --color-sayur-light: rgba(56, 178, 172, 0.15);
+            --color-buah-light: rgba(245, 101, 101, 0.15);
+            --color-makanan-light: rgba(236, 201, 75, 0.15);
+            
+            --correct-bg: rgba(72, 187, 120, 0.2);
+            --wrong-bg: rgba(245, 101, 101, 0.2);
+        }
+
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .app-header {
+            position: relative;
+            background: var(--bg-header);
+            color: white;
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .app-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .app-header .subtitle {
+            font-size: 14px;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .version-badge {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: var(--bg-card);
+            opacity: 0.8;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .header-tools {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .header-tool-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            padding: 0;
+        }
+
+        .header-tool-btn:hover {
+            background: rgba(255,255,255,0.4);
+            transform: scale(1.1);
+        }
+
+        .btn-home-header {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-home-header:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            pointer-events: none;
+            backdrop-filter: blur(5px);
+        }
+
+        /* ============================================
+           MODE TABS
+           ============================================ */
+        .mode-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 24px;
+            background: var(--bg-tabs);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+
+        .mode-tab {
+            padding: 10px 24px;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            background: var(--bg-card);
+            font-family: 'Lexend', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .mode-tab:hover {
+            border-color: #667EEA;
+            color: #667EEA;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .mode-tab.active {
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* ============================================
+           TOPIC FILTER PILLS
+           ============================================ */
+        .topic-filters {
+            display: flex;
+            gap: 8px;
+            padding: 16px 24px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .topic-filters::-webkit-scrollbar { display: none; }
+
+        .topic-pill {
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            font-family: 'Lexend', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+
+        .topic-pill:hover { transform: translateY(-2px); }
+        .topic-pill.active { color: white; border-color: transparent; }
+
+        .topic-pill[data-topic="nombor"].active { background: var(--color-nombor); }
+        .topic-pill[data-topic="warna"].active { background: var(--color-warna); }
+        .topic-pill[data-topic="haiwan"].active { background: var(--color-haiwan); }
+        .topic-pill[data-topic="sukan"].active { background: var(--color-sukan); }
+        .topic-pill[data-topic="pakaian"].active { background: var(--color-pakaian); }
+        .topic-pill[data-topic="sayur"].active { background: var(--color-sayur); }
+        .topic-pill[data-topic="buah"].active { background: var(--color-buah); }
+        .topic-pill[data-topic="makanan"].active { background: var(--color-makanan); }
+        .topic-pill[data-topic="all"].active { background: linear-gradient(135deg, #667EEA, #764BA2); }
+
+        /* ============================================
+           CONTENT AREA
+           ============================================ */
+        .content-area {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8px 20px 40px;
+        }
+
+        /* ============================================
+           BROWSE MODE — TOPIC SECTIONS
+           ============================================ */
+        .topic-section {
+            margin-bottom: 32px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .topic-header .emoji { font-size: 28px; }
+        .topic-header .arabic-title {
+            font-family: 'Amiri', serif;
+            font-size: 22px;
+            margin-right: auto;
+            direction: rtl;
+        }
+
+        .topic-header.nombor { background: var(--color-nombor); }
+        .topic-header.warna { background: var(--color-warna); }
+        .topic-header.haiwan { background: var(--color-haiwan); }
+        .topic-header.sukan { background: var(--color-sukan); }
+        .topic-header.pakaian { background: var(--color-pakaian); }
+        .topic-header.sayur { background: var(--color-sayur); }
+        .topic-header.buah { background: var(--color-buah); }
+        .topic-header.makanan { background: var(--color-makanan); }
+
+        /* ============================================
+           VOCAB CARDS
+           ============================================ */
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-card);
+            border-radius: 0 0 var(--radius) var(--radius);
+            border: 1px solid var(--border);
+            border-top: none;
+        }
+
+        .vocab-card {
+            background: var(--bg-main);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .vocab-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .vocab-card .card-emoji {
+            font-size: 36px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .vocab-card .card-bm {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .vocab-card .card-rumi {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-rumi);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .vocab-card .card-arab {
+            font-family: 'Amiri', serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--text-arabic);
+            direction: rtl;
+            line-height: 1.6;
+            padding: 8px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+
+        /* Color-coded card borders */
+        .vocab-card[data-topic="nombor"]:hover { border-color: var(--color-nombor); }
+        .vocab-card[data-topic="warna"]:hover { border-color: var(--color-warna); }
+        .vocab-card[data-topic="haiwan"]:hover { border-color: var(--color-haiwan); }
+        .vocab-card[data-topic="sukan"]:hover { border-color: var(--color-sukan); }
+        .vocab-card[data-topic="pakaian"]:hover { border-color: var(--color-pakaian); }
+        .vocab-card[data-topic="sayur"]:hover { border-color: var(--color-sayur); }
+        .vocab-card[data-topic="buah"]:hover { border-color: var(--color-buah); }
+        .vocab-card[data-topic="makanan"]:hover { border-color: var(--color-makanan); }
+
+        /* ============================================
+           QUIZ MODE
+           ============================================ */
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .quiz-progress-bar {
+            width: 100%;
+            height: 10px;
+            background: var(--border);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667EEA, #764BA2);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .quiz-score {
+            text-align: center;
+            margin-bottom: 16px;
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .quiz-score span {
+            font-weight: 700;
+            color: var(--correct);
+            font-size: 20px;
+        }
+
+        .quiz-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 32px 24px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .quiz-card .quiz-emoji {
+            font-size: 56px;
+            margin-bottom: 12px;
+            display: block;
+            animation: bounce 1s ease infinite;
+        }
+
+        .quiz-card .quiz-question-label {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .quiz-card .quiz-question {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .quiz-card .quiz-rumi {
+            font-size: 15px;
+            font-style: italic;
+            color: var(--text-rumi);
+            margin-bottom: 24px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .quiz-option {
+            padding: 22px 16px;
+            border: 3px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-main);
+            font-family: 'Amiri', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-arabic);
+            cursor: pointer;
+            transition: var(--transition);
+            direction: rtl;
+            line-height: 1.4;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quiz-option:hover:not(.disabled) {
+            border-color: #667EEA;
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--correct);
+            background: var(--correct-bg);
+            animation: pulse 0.5s ease;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--wrong);
+            background: var(--wrong-bg);
+            animation: shake 0.5s ease;
+        }
+
+        .quiz-option.disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        .quiz-option.disabled.show-correct {
+            border-color: var(--correct);
+            background: var(--correct-bg);
+            opacity: 1;
+        }
+
+        .quiz-feedback {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            font-size: 18px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .quiz-feedback.show { display: block; animation: fadeInUp 0.3s ease; }
+        .quiz-feedback.correct { background: var(--correct-bg); color: #276749; }
+        .quiz-feedback.wrong { background: var(--wrong-bg); color: #9B2C2C; }
+
+        .quiz-next-btn {
+            margin-top: 20px;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: none;
+        }
+
+        .quiz-next-btn.show { display: inline-block; animation: fadeInUp 0.3s ease; }
+        .quiz-next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+
+        /* Quiz Complete */
+        .quiz-complete {
+            text-align: center;
+            padding: 40px 24px;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .quiz-complete .big-emoji { font-size: 80px; display: block; margin-bottom: 16px; }
+        .quiz-complete h2 { font-size: 28px; margin-bottom: 8px; }
+        .quiz-complete .final-score { font-size: 48px; font-weight: 700; color: #667EEA; }
+        .quiz-complete .final-label { font-size: 16px; color: var(--text-light); margin-bottom: 24px; }
+
+        .quiz-restart-btn {
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quiz-restart-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+
+        /* ============================================
+           PROGRESS SECTION
+           ============================================ */
+        .progress-container {
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .progress-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .progress-card .prog-emoji { font-size: 32px; }
+        .progress-card .prog-info { flex: 1; }
+        .progress-card .prog-name { font-weight: 600; font-size: 16px; }
+
+        .progress-bar-track {
+            width: 100%;
+            height: 10px;
+            background: #EDF2F7;
+            border-radius: 10px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar-value {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.8s ease;
+        }
+
+        .progress-card .prog-percent {
+            font-size: 18px;
+            font-weight: 700;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .progress-total {
+            text-align: center;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .progress-total .total-score {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 24px;
+            background: none;
+            border: 2px solid var(--wrong);
+            color: var(--wrong);
+            border-radius: 50px;
+            font-family: 'Lexend', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .reset-btn:hover { background: var(--wrong); color: white; }
+
+        /* ============================================
+           ANIMATIONS
+           ============================================ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 600px) {
+            .app-header h1 { font-size: 22px; }
+            .version-badge { display: none; }
+            .header-tools { right: 16px; }
+            .mode-tabs { padding: 10px 12px; gap: 6px; justify-content: center !important; flex-wrap: wrap; }
+            .mode-tab { padding: 8px 12px; font-size: 12px; white-space: nowrap; }
+            .topic-filters { padding: 10px 12px; }
+            .content-area { padding: 8px 12px 32px; }
+            .vocab-grid { grid-template-columns: 1fr; padding: 12px; }
+            .quiz-options { grid-template-columns: 1fr; gap: 14px; }
+            .quiz-card .quiz-question { font-size: 22px; }
+            .quiz-option { font-size: 26px; padding: 20px 14px; min-height: 75px; }
+            .vocab-card .card-arab { font-size: 26px; }
+        }
+
+        /* ============================================
+           PRINT STYLES — A4 FRIENDLY
+           ============================================ */
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+            body {
+                background: white !important;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .app-header {
+                position: static;
+                background: white !important;
+                color: var(--text-primary) !important;
+                box-shadow: none;
+                padding: 16px;
+                border-bottom: 3px solid #667EEA;
+            }
+
+            .app-header h1 { color: #667EEA !important; font-size: 24px; }
+            .app-header .subtitle { color: var(--text-secondary) !important; }
+
+            .mode-tabs, .quiz-container, .progress-container, .topic-filters, #quiz-view, #progress-view, .card-audio-btn, .version-badge {
+                display: none !important;
+            }
+
+            #browse-view { display: block !important; }
+
+            .content-area {
+                max-width: 100%;
+                padding: 0 16px;
+            }
+
+            .topic-section {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .topic-header {
+                color: white !important;
+                font-size: 16px;
+                padding: 10px 16px;
+                border-radius: 8px 8px 0 0;
+            }
+
+            .vocab-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+                padding: 10px;
+                border: 1px solid #ddd;
+            }
+
+            .vocab-card {
+                padding: 10px;
+                background: #fafafa !important;
+                border: 1px solid #eee;
+                break-inside: avoid;
+            }
+
+            .vocab-card .card-emoji { font-size: 24px; margin-bottom: 4px; }
+            .vocab-card .card-bm { font-size: 13px; }
+            .vocab-card .card-rumi { font-size: 11px; margin-bottom: 4px; }
+            .vocab-card .card-arab { font-size: 20px; padding: 4px; }
+
+            .vocab-card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .print-footer {
+                display: block !important;
+                text-align: center;
+                padding: 12px;
+                font-size: 11px;
+                color: #999;
+                border-top: 1px solid #eee;
+                margin-top: 20px;
+            }
+        }
+
+        .print-footer { display: none; }
+
+        /* ============================================
+           HIDDEN UTILITY
+           ============================================ */
+        .hidden { display: none !important; }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HL2PFGWTHM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-HL2PFGWTHM');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- ============================================
+         HEADER
+         ============================================ -->
+    <header class="app-header" id="app-header">
+        <a href="../../index.html" class="btn-home-header">🏠 Menu Utama</a>
+        <div class="header-tools">
+            <button class="header-tool-btn" id="tab-print" onclick="window.print()" title="Print A4">🖨️</button>
+            <button class="header-tool-btn" id="btn-dark-mode" onclick="toggleDarkMode()" title="Gelap/Terang">🌙</button>
+        </div>
+        <span class="version-badge">v1.3.8</span>
+        <h1>📚 Bijak KAFA — Revision Darjah 2</h1>
+        <div class="subtitle">Lughatul Arabiyyah • Selangor • Exam Pertengahan Tahun 2026</div>
+    </header>
+
+    <!-- ============================================
+         MODE TABS
+         ============================================ -->
+    <div style="background: var(--bg-tabs); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; width: 100%;">
+        <nav class="mode-tabs" id="mode-tabs" style="max-width: 900px; margin: 0 auto; background: transparent; border: none; padding-top: 16px; padding-bottom: 16px;">
+            <button class="mode-tab active" data-mode="browse" id="tab-browse">📖 Belajar</button>
+            <button class="mode-tab" data-mode="quiz" id="tab-quiz">🧠 Kuiz</button>
+            <button class="mode-tab" data-mode="progress" id="tab-progress">📊 Progress</button>
+        </nav>
+    </div>
+
+    <!-- ============================================
+         TOPIC FILTERS
+         ============================================ -->
+    <div class="topic-filters" id="topic-filters">
+        <button class="topic-pill active" data-topic="all" id="filter-all" style="display:flex;flex-direction:column;align-items:center;gap:4px;">✨ Semua<div class="module-status"></div></button>
+        <button class="topic-pill" data-topic="nombor" id="filter-nombor" style="display:flex;flex-direction:column;align-items:center;gap:4px;">🔢 Nombor<div class="module-status"></div></button>
+        <button class="topic-pill" data-topic="warna" id="filter-warna" style="display:flex;flex-direction:column;align-items:center;gap:4px;">🎨 Warna<div class="module-status"></div></button>
+        <button class="topic-pill" data-topic="haiwan" id="filter-haiwan" style="display:flex;flex-direction:column;align-items:center;gap:4px;">🐱 Haiwan<div class="module-status"></div></button>
+        <button class="topic-pill" data-topic="sukan" id="filter-sukan" style="display:flex;flex-direction:column;align-items:center;gap:4px;">⚽ Sukan<div class="module-status"></div></button>
+        <button class="topic-pill" data-topic="pakaian" id="filter-pakaian" style="display:flex;flex-direction:column;align-items:center;gap:4px;">👕 Pakaian<div class="module-status"></div></button>
+        <button class="topic-pill" data-topic="sayur" id="filter-sayur" style="display:flex;flex-direction:column;align-items:center;gap:4px;">🥕 Sayuran<div class="module-status"></div></button>
+        <button class="topic-pill" data-topic="buah" id="filter-buah" style="display:flex;flex-direction:column;align-items:center;gap:4px;">🍎 Buah<div class="module-status"></div></button>
+        <button class="topic-pill" data-topic="makanan" id="filter-makanan" style="display:flex;flex-direction:column;align-items:center;gap:4px;">🍚 Makanan<div class="module-status"></div></button>
+    </div>
+
+    <!-- ============================================
+         CONTENT AREA
+         ============================================ -->
+    <main class="content-area" id="content-area">
+        <!-- Browse View -->
+        <div id="browse-view"></div>
+
+        <!-- Quiz View -->
+        <div id="quiz-view" class="hidden"></div>
+
+        <!-- Progress View -->
+        <div id="progress-view" class="hidden"></div>
+    </main>
+
+    <div class="print-footer">
+        Bijak KAFA — Nota Revision Darjah 2 • Lughatul Arabiyyah Selangor • Dicetak dari app revision
+    </div>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script src="audio_db.js"></script>
+    <script>
+    // =============================================
+    // VOCABULARY DATA — ALL CORRECT ARABIC
+    // =============================================
+    const VOCAB_DATA = {
+        nombor: {
+            title: "Nombor",
+            titleAr: "الأَعْدَادُ",
+            emoji: "🔢",
+            color: "nombor",
+            items: [
+                { bm: "1 - Satu", rumi: "Wahidun", arab: "وَاحِدٌ", emoji: "1️⃣" },
+                { bm: "2 - Dua", rumi: "Ithnani", arab: "اِثْنَانِ", emoji: "2️⃣" },
+                { bm: "3 - Tiga", rumi: "Thalathatun", arab: "ثَلَاثَةٌ", emoji: "3️⃣" },
+                { bm: "4 - Empat", rumi: "Arba'atun", arab: "أَرْبَعَةٌ", emoji: "4️⃣" },
+                { bm: "5 - Lima", rumi: "Khamsatun", arab: "خَمْسَةٌ", emoji: "5️⃣" },
+                { bm: "6 - Enam", rumi: "Sittatun", arab: "سِتَّةٌ", emoji: "6️⃣" },
+                { bm: "7 - Tujuh", rumi: "Sab'atun", arab: "سَبْعَةٌ", emoji: "7️⃣" },
+                { bm: "8 - Lapan", rumi: "Thamaniyatun", arab: "ثَمَانِيَةٌ", emoji: "8️⃣" },
+                { bm: "9 - Sembilan", rumi: "Tis'atun", arab: "تِسْعَةٌ", emoji: "9️⃣" },
+                { bm: "10 - Sepuluh", rumi: "'Asharatun", arab: "عَشَرَةٌ", emoji: "🔟" },
+                { bm: "11 - Sebelas", rumi: "Ahada 'Asyara", arab: "أَحَدَ عَشَرَ", emoji: "🔢" },
+                { bm: "12 - Dua Belas", rumi: "Ithna 'Asyara", arab: "اِثْنَا عَشَرَ", emoji: "🔢" },
+                { bm: "13 - Tiga Belas", rumi: "Thalathata 'Asyara", arab: "ثَلَاثَةَ عَشَرَ", emoji: "🔢" },
+                { bm: "14 - Empat Belas", rumi: "Arba'ata 'Asyara", arab: "أَرْبَعَةَ عَشَرَ", emoji: "🔢" },
+                { bm: "15 - Lima Belas", rumi: "Khamsata 'Asyara", arab: "خَمْسَةَ عَشَرَ", emoji: "🔢" },
+                { bm: "20 - Dua Puluh", rumi: "'Isyruna", arab: "عِشْرُونَ", emoji: "🔢" },
+                { bm: "30 - Tiga Puluh", rumi: "Thalathuna", arab: "ثَلَاثُونَ", emoji: "🔢" },
+                { bm: "40 - Empat Puluh", rumi: "Arba'una", arab: "أَرْبَعُونَ", emoji: "🔢" },
+                { bm: "50 - Lima Puluh", rumi: "Khamsuna", arab: "خَمْسُونَ", emoji: "🔢" },
+                { bm: "100 - Seratus", rumi: "Mi'atun", arab: "مِائَةٌ", emoji: "💯" },
+                { bm: "200 - Dua Ratus", rumi: "Mi'atani", arab: "مِائَتَانِ", emoji: "💯" },
+            ]
+        },
+        warna: {
+            title: "Warna",
+            titleAr: "الأَلْوَانُ",
+            emoji: "🎨",
+            color: "warna",
+            items: [
+                { bm: "Merah", rumi: "Ahmaru", arab: "أَحْمَرُ", emoji: "🔴" },
+                { bm: "Biru", rumi: "Azraqu", arab: "أَزْرَقُ", emoji: "🔵" },
+                { bm: "Kuning", rumi: "Asfaru", arab: "أَصْفَرُ", emoji: "🟡" },
+                { bm: "Hijau", rumi: "Akhdaru", arab: "أَخْضَرُ", emoji: "🟢" },
+                { bm: "Hitam", rumi: "Aswadu", arab: "أَسْوَدُ", emoji: "⚫" },
+                { bm: "Putih", rumi: "Abyadu", arab: "أَبْيَضُ", emoji: "⚪" },
+                { bm: "Oren", rumi: "Burtuqaliyyun", arab: "بُرْتُقَالِيٌّ", emoji: "🟠" },
+                { bm: "Ungu", rumi: "Banafsajiyyun", arab: "بَنَفْسَجِيٌّ", emoji: "🟣" },
+                { bm: "Kelabu", rumi: "Ramadiyyun", arab: "رَمَادِيٌّ", emoji: "🩶" },
+                { bm: "Coklat", rumi: "Bunniyyun", arab: "بُنِّيٌّ", emoji: "🟤" },
+                { bm: "Merah Jambu", rumi: "Wardiyyun", arab: "وَرْدِيٌّ", emoji: "🩷" },
+            ]
+        },
+        haiwan: {
+            title: "Haiwan",
+            titleAr: "الحَيَوَانَاتُ",
+            emoji: "🐱",
+            color: "haiwan",
+            items: [
+                { bm: "Kucing", rumi: "Qittun", arab: "قِطٌّ", emoji: "🐱" },
+                { bm: "Arnab", rumi: "Arnabun", arab: "أَرْنَبٌ", emoji: "🐰" },
+                { bm: "Ayam", rumi: "Dajajatun", arab: "دَجَاجَةٌ", emoji: "🐔" },
+                { bm: "Ikan", rumi: "Samakatun", arab: "سَمَكَةٌ", emoji: "🐟" },
+                { bm: "Burung", rumi: "Tairun", arab: "طَائِرٌ", emoji: "🐦" },
+                { bm: "Kambing", rumi: "Kharufun", arab: "خَرُوفٌ", emoji: "🐑" },
+                { bm: "Lembu", rumi: "Baqaratun", arab: "بَقَرَةٌ", emoji: "🐄" },
+                { bm: "Kuda", rumi: "Hisanun", arab: "حِصَانٌ", emoji: "🐴" },
+                { bm: "Unta", rumi: "Jamalun", arab: "جَمَلٌ", emoji: "🐪" },
+                { bm: "Singa", rumi: "Asadun", arab: "أَسَدٌ", emoji: "🦁" },
+                { bm: "Gajah", rumi: "Filun", arab: "فِيلٌ", emoji: "🐘" },
+                { bm: "Kupu-kupu", rumi: "Farashatun", arab: "فَرَاشَةٌ", emoji: "🦋" },
+            ]
+        },
+        sukan: {
+            title: "Sukan & Permainan",
+            titleAr: "الرِّيَاضَةُ وَالأَلْعَابُ",
+            emoji: "⚽",
+            color: "sukan",
+            items: [
+                { bm: "Bola Sepak", rumi: "Kuratul Qadami", arab: "كُرَةُ الْقَدَمِ", emoji: "⚽" },
+                { bm: "Badminton", rumi: "Kuratur Rishati", arab: "كُرَةُ الرِّيشَةِ", emoji: "🏸" },
+                { bm: "Bola Keranjang", rumi: "Kuratus Sallati", arab: "كُرَةُ السَّلَّةِ", emoji: "🏀" },
+                { bm: "Bola Tampar", rumi: "Kuratut Ta'irati", arab: "كُرَةُ الطَّائِرَةِ", emoji: "🏐" },
+                { bm: "Berenang", rumi: "As-Sibahatu", arab: "السِّبَاحَةُ", emoji: "🏊" },
+                { bm: "Memanah", rumi: "Ar-Rimayatu", arab: "الرِّمَايَةُ", emoji: "🏹" },
+                { bm: "Menunggang Kuda", rumi: "Rukubul Khaili", arab: "رُكُوبُ الْخَيْلِ", emoji: "🏇" },
+                { bm: "Larian", rumi: "Al-Jaryu", arab: "الْجَرْيُ", emoji: "🏃" },
+                { bm: "Catur", rumi: "Asy-Syitranju", arab: "الشِّطْرَنْجُ", emoji: "♟️" },
+                { bm: "Tenis", rumi: "Kuratul Midrabi", arab: "كُرَةُ الْمِضْرَبِ", emoji: "🎾" },
+                { bm: "Ping Pong", rumi: "Kuratul Tawilati", arab: "كُرَةُ الطَّاوِلَةِ", emoji: "🏓" },
+                { bm: "Bola Baling", rumi: "Kuratul Yadi", arab: "كُرَةُ الْيَدِ", emoji: "🤾" },
+            ]
+        },
+        pakaian: {
+            title: "Pakaian",
+            titleAr: "الْمَلَابِسُ",
+            emoji: "👕",
+            color: "pakaian",
+            items: [
+                { bm: "Kemeja", rumi: "Qamisun", arab: "قَمِيصٌ", emoji: "👔" },
+                { bm: "Jubah Lelaki", rumi: "Thawbun", arab: "ثَوْبٌ", emoji: "🥋" },
+                { bm: "Tudung", rumi: "Khimarun", arab: "خِمَارٌ", emoji: "🧕" },
+                { bm: "Kasut", rumi: "Hiza'un", arab: "حِذَاءٌ", emoji: "👟" },
+                { bm: "Seluar", rumi: "Sirwalun", arab: "سِرْوَالٌ", emoji: "👖" },
+                { bm: "Stoking", rumi: "Jawrabun", arab: "جَوْرَبٌ", emoji: "🧦" },
+                { bm: "Serban", rumi: "'Imamatun", arab: "عِمَامَةٌ", emoji: "👳" },
+                { bm: "Songkok / Kopiah", rumi: "Qalansuwatun", arab: "قَلَنْسُوَةٌ", emoji: "🧢" },
+                { bm: "Selipar", rumi: "Na'lun", arab: "نَعْلٌ", emoji: "🩴" },
+                { bm: "Kain Pelikat", rumi: "Izarun", arab: "إِزَارٌ", emoji: "🩱" },
+                { bm: "Tali Pinggang", rumi: "Hizamun", arab: "حِزَامٌ", emoji: "🪢" },
+                { bm: "Tuala", rumi: "Minsyafatun", arab: "مِنْشَفَةٌ", emoji: "🛁" },
+            ]
+        },
+        sayur: {
+            title: "Sayur-sayuran",
+            titleAr: "الْخُضْرَوَاتُ",
+            emoji: "🥕",
+            color: "sayur",
+            items: [
+                { bm: "Lobak Merah", rumi: "Jazarun", arab: "جَزَرٌ", emoji: "🥕" },
+                { bm: "Timun", rumi: "Khiyarun", arab: "خِيَارٌ", emoji: "🥒" },
+                { bm: "Tomato", rumi: "Tamatimu", arab: "طَمَاطِمُ", emoji: "🍅" },
+                { bm: "Bawang Putih", rumi: "Thaumun", arab: "ثَوْمٌ", emoji: "🧄" },
+                { bm: "Bawang Merah", rumi: "Basalun", arab: "بَصَلٌ", emoji: "🧅" },
+                { bm: "Terung", rumi: "Bazinjanun", arab: "بَاذِنْجَانٌ", emoji: "🍆" },
+                { bm: "Cili / Lada", rumi: "Filfilun", arab: "فِلْفِلٌ", emoji: "🌶️" },
+                { bm: "Kentang", rumi: "Batatisu", arab: "بَطَاطِسُ", emoji: "🥔" },
+                { bm: "Jagung", rumi: "Dhurratun", arab: "ذُرَّةٌ", emoji: "🌽" },
+                { bm: "Cendawan", rumi: "Fitrun", arab: "فِطْرٌ", emoji: "🍄" },
+            ]
+        },
+        buah: {
+            title: "Buah-buahan",
+            titleAr: "الْفَوَاكِهُ",
+            emoji: "🍎",
+            color: "buah",
+            items: [
+                { bm: "Epal", rumi: "Tuffahatun", arab: "تُفَّاحَةٌ", emoji: "🍎" },
+                { bm: "Pisang", rumi: "Mawzatun", arab: "مَوْزَةٌ", emoji: "🍌" },
+                { bm: "Oren", rumi: "Burtuqalatun", arab: "بُرْتُقَالَةٌ", emoji: "🍊" },
+                { bm: "Anggur", rumi: "'Inabun", arab: "عِنَبٌ", emoji: "🍇" },
+                { bm: "Tembikai", rumi: "Battikhun", arab: "بَطِّيخٌ", emoji: "🍉" },
+                { bm: "Limau", rumi: "Laymunun", arab: "لَيْمُونٌ", emoji: "🍋" },
+                { bm: "Nanas", rumi: "Ananasun", arab: "أَنَانَاسٌ", emoji: "🍍" },
+                { bm: "Strawberi", rumi: "Farawlatun", arab: "فَرَاوْلَةٌ", emoji: "🍓" },
+                { bm: "Mangga", rumi: "Manja", arab: "مَانْجَا", emoji: "🥭" },
+                { bm: "Pear", rumi: "Kummathra", arab: "كُمَّثْرَى", emoji: "🍐" },
+            ]
+        },
+        makanan: {
+            title: "Makanan & Minuman",
+            titleAr: "الأَطْعِمَةُ وَالأَشْرِبَةُ",
+            emoji: "🍚",
+            color: "makanan",
+            items: [
+                { bm: "Nasi", rumi: "Aruzzun", arab: "أُرُزٌّ", emoji: "🍚" },
+                { bm: "Roti", rumi: "Khubzun", arab: "خُبْزٌ", emoji: "🍞" },
+                { bm: "Air", rumi: "Ma'un", arab: "مَاءٌ", emoji: "💧" },
+                { bm: "Susu", rumi: "Halibun", arab: "حَلِيبٌ", emoji: "🥛" },
+                { bm: "Teh", rumi: "Shayun", arab: "شَايٌ", emoji: "🍵" },
+                { bm: "Daging", rumi: "Lahmun", arab: "لَحْمٌ", emoji: "🥩" },
+                { bm: "Ikan", rumi: "Samakun", arab: "سَمَكٌ", emoji: "🐟" },
+                { bm: "Telur", rumi: "Baydatun", arab: "بَيْضَةٌ", emoji: "🥚" },
+                { bm: "Coklat", rumi: "Syukulatatun", arab: "شُوكُولَاتَةٌ", emoji: "🍫" },
+                { bm: "Kek", rumi: "Ka'kun", arab: "كَعْكٌ", emoji: "🎂" },
+                { bm: "Jus", rumi: "'Asirun", arab: "عَصِيرٌ", emoji: "🧃" },
+                { bm: "Biskut", rumi: "Biskuitun", arab: "بِسْكُوِيتٌ", emoji: "🍪" },
+            ]
+        }
+    };
+
+    // =============================================
+    // APP STATE
+    // =============================================
+    let currentMode = 'browse';
+    let currentTopic = 'all';
+    let quizState = {
+        questions: [],
+        currentIndex: 0,
+        score: 0,
+        answered: false,
+        topicScores: {}
+    };
+
+    // =============================================
+    // INIT
+    // =============================================
+    document.addEventListener('DOMContentLoaded', () => {
+        document.body.setAttribute('data-mode', currentMode);
+        initTheme();
+        initModeTabs();
+        initTopicFilters();
+        renderBrowseView();
+        loadProgress();
+        updateMenuCards();
+    });
+
+    // =============================================
+    // THEME
+    // =============================================
+    function initTheme() {
+        if (localStorage.getItem('kafa_theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('btn-dark-mode').innerHTML = '☀️ Terang';
+        }
+    }
+
+    function toggleDarkMode() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('kafa_theme', 'light');
+            document.getElementById('btn-dark-mode').innerHTML = '🌙';
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('kafa_theme', 'dark');
+            document.getElementById('btn-dark-mode').innerHTML = '☀️';
+        }
+    }
+
+    // =============================================
+    // MODE TABS
+    // =============================================
+    
+    // =============================================
+    // PERFORMANCE DASHBOARD & SESSION LOGIC
+    // =============================================
+    let chartInstance = null;
+
+    function endQuizSession() {
+        // Record session to localStorage
+        const percentage = Math.round((quizState.score / quizState.totalQuestions) * 100);
+        const topicName = currentTopic === 'all' ? 'Semua Topik' : VOCAB_DATA[currentTopic].title;
+        
+        const sessionRecord = {
+            date: new Date().toISOString(),
+            module: topicName,
+            topicKey: currentTopic,
+            correct: quizState.score,
+            total: quizState.totalQuestions,
+            percent: percentage
+        };
+
+        let sessions = JSON.parse(localStorage.getItem('kafa_sessions') || '[]');
+        sessions.push(sessionRecord);
+        localStorage.setItem('kafa_sessions', JSON.stringify(sessions));
+
+        // Show Summary Modal
+        document.getElementById('summary-score').innerText = `${quizState.score}/${quizState.totalQuestions}`;
+        document.getElementById('summary-percent').innerText = `${percentage}%`;
+        document.getElementById('quiz-summary-modal').classList.remove('hidden');
+
+        updateMenuCards();
+    }
+
+    function closeQuizSummary() {
+        document.getElementById('quiz-summary-modal').classList.add('hidden');
+        // Go back to browse mode by clicking the tab
+        document.getElementById('tab-browse').click();
+    }
+
+    function updateMenuCards() {
+        const sessions = JSON.parse(localStorage.getItem('kafa_sessions') || '[]');
+        
+        // Find latest session per module
+        const latestSessions = {};
+        sessions.forEach(s => {
+            // Overwrite with newer session (since array is chronological)
+            latestSessions[s.topicKey] = s.percent;
+        });
+
+        // Update each status badge
+        document.querySelectorAll('.topic-pill').forEach(btn => {
+            const topicKey = btn.dataset.topic;
+            const badge = btn.querySelector('.module-status');
+            if (!badge) return;
+
+            // Reset classes
+            badge.className = 'module-status';
+
+            if (latestSessions.hasOwnProperty(topicKey)) {
+                const p = latestSessions[topicKey];
+                badge.innerText = `Terakhir: ${p}%`;
+                if (p >= 80) badge.classList.add('status-green');
+                else if (p >= 50) badge.classList.add('status-yellow');
+                else badge.classList.add('status-red');
+            } else {
+                badge.innerText = `⚪ Belum Cuba`;
+            }
+        });
+    }
+
+    function openDashboard() {
+        document.getElementById('dashboard-modal').classList.remove('hidden');
+        switchDashTab('chart');
+        renderHistory();
+    }
+
+    function closeDashboard() {
+        document.getElementById('dashboard-modal').classList.add('hidden');
+    }
+
+    function switchDashTab(tabName) {
+        document.getElementById('tab-dash-chart').classList.remove('active');
+        document.getElementById('tab-dash-history').classList.remove('active');
+        document.getElementById('dash-chart-view').classList.add('hidden');
+        document.getElementById('dash-history-view').classList.add('hidden');
+
+        if (tabName === 'chart') {
+            document.getElementById('tab-dash-chart').classList.add('active');
+            document.getElementById('dash-chart-view').classList.remove('hidden');
+            renderChart();
+        } else {
+            document.getElementById('tab-dash-history').classList.add('active');
+            document.getElementById('dash-history-view').classList.remove('hidden');
+        }
+    }
+
+    function renderChart() {
+        const sessions = JSON.parse(localStorage.getItem('kafa_sessions') || '[]');
+        const filterVal = document.getElementById('chart-filter').value;
+        
+        let filtered = sessions;
+        if (filterVal !== 'all') {
+            filtered = sessions.filter(s => s.topicKey === filterVal);
+        } else {
+            // If "all" selected, maybe just show sessions where topicKey === 'all'
+            // or show literally everything. The requirement says filter by module.
+            filtered = sessions.filter(s => s.topicKey === 'all');
+        }
+
+        // Prepare data for Chart.js
+        const labels = filtered.map((s, idx) => `Sesi ${idx + 1}`);
+        const dataPoints = filtered.map(s => s.percent);
+
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Ketepatan Markah (%)',
+                    data: dataPoints,
+                    borderColor: '#667EEA',
+                    backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+
+    function renderHistory() {
+        const sessions = JSON.parse(localStorage.getItem('kafa_sessions') || '[]');
+        const tbody = document.getElementById('history-tbody');
+        tbody.innerHTML = '';
+
+        // Reverse to show newest first
+        [...sessions].reverse().forEach(s => {
+            const dateObj = new Date(s.date);
+            const dateStr = dateObj.toLocaleDateString('ms-MY') + ' ' + dateObj.toLocaleTimeString('ms-MY', {hour: '2-digit', minute:'2-digit'});
+            
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${dateStr}</td>
+                <td>${s.module}</td>
+                <td>${s.correct}/${s.total}</td>
+                <td>${s.percent}%</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function clearHistory() {
+        if (confirm("Adakah anda pasti mahu memadam SEMUA rekod prestasi?")) {
+            localStorage.removeItem('kafa_sessions');
+            renderHistory();
+            renderChart();
+            updateMenuCards();
+        }
+    }
+
+    function initModeTabs() {
+        document.querySelectorAll('.mode-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const mode = tab.dataset.mode;
+                if (!mode || mode === 'print') return; // ignore print and dark mode buttons
+
+                document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentMode = mode;
+                document.body.setAttribute('data-mode', mode);
+
+                document.getElementById('browse-view').classList.toggle('hidden', mode !== 'browse');
+                document.getElementById('quiz-view').classList.toggle('hidden', mode !== 'quiz');
+                document.getElementById('progress-view').classList.toggle('hidden', mode !== 'progress');
+                document.getElementById('topic-filters').classList.toggle('hidden', mode === 'progress');
+
+                if (mode === 'browse') renderBrowseView();
+                if (mode === 'quiz') startQuiz();
+                if (mode === 'progress') renderProgressView();
+            });
+        });
+    }
+
+    // =============================================
+    // TOPIC FILTERS
+    // =============================================
+    function initTopicFilters() {
+        document.querySelectorAll('.topic-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.topic-pill').forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                currentTopic = pill.dataset.topic;
+
+                if (currentMode === 'browse') renderBrowseView();
+                if (currentMode === 'quiz') {
+                    startQuiz();
+                    setTimeout(() => {
+                        const tabsHeight = document.getElementById('mode-tabs').offsetHeight || 70;
+                        const element = document.getElementById('quiz-view');
+                        const y = element.getBoundingClientRect().top + window.pageYOffset - tabsHeight - 20;
+                        window.scrollTo({top: y, behavior: 'smooth'});
+                    }, 100);
+                }
+            });
+        });
+    }
+
+    // =============================================
+    // BROWSE VIEW
+    // =============================================
+    function renderBrowseView() {
+        const container = document.getElementById('browse-view');
+        let html = '';
+
+        const topics = currentTopic === 'all'
+            ? Object.keys(VOCAB_DATA)
+            : [currentTopic];
+
+        topics.forEach(key => {
+            const topic = VOCAB_DATA[key];
+            html += `
+                <section class="topic-section">
+                    <div class="topic-header ${topic.color}">
+                        <span class="emoji">${topic.emoji}</span>
+                        <span>${topic.title}</span>
+                        <span class="arabic-title">${topic.titleAr}</span>
+                    </div>
+                    <div class="vocab-grid">
+                        ${topic.items.map(item => `
+                            <div class="vocab-card" data-topic="${key}" onclick="speakVocab('${item.rumi.replace(/'/g, "\\'")}')">
+                                <span class="card-emoji">${item.emoji}</span>
+                                <div class="card-bm">${item.bm}</div>
+                                <div class="card-rumi">${item.rumi}</div>
+                                <div class="card-arab">${item.arab}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </section>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // =============================================
+    // QUIZ MODE
+    // =============================================
+    function getQuizItems() {
+        let items = [];
+        const topics = currentTopic === 'all'
+            ? Object.keys(VOCAB_DATA)
+            : [currentTopic];
+
+        topics.forEach(key => {
+            VOCAB_DATA[key].items.forEach(item => {
+                items.push({ ...item, topic: key });
+            });
+        });
+
+        return shuffleArray(items);
+    }
+
+    function startQuiz() {
+        const allItems = getQuizItems();
+        const quizLength = Math.min(allItems.length, 15); // Max 15 questions per round
+
+        quizState = {
+            questions: allItems.slice(0, quizLength),
+            currentIndex: 0,
+            score: 0,
+            answered: false,
+            topicScores: {}
+        };
+
+        renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+        const container = document.getElementById('quiz-view');
+
+        if (quizState.currentIndex >= quizState.questions.length) {
+            renderQuizComplete();
+            return;
+        }
+
+        const q = quizState.questions[quizState.currentIndex];
+        const progress = ((quizState.currentIndex) / quizState.questions.length) * 100;
+
+        // Generate wrong options from same topic first, then others
+        const allItems = [];
+        Object.keys(VOCAB_DATA).forEach(key => {
+            VOCAB_DATA[key].items.forEach(item => {
+                if (item.arab !== q.arab) allItems.push(item);
+            });
+        });
+
+        const wrongOptions = shuffleArray(allItems).slice(0, 3);
+        const options = shuffleArray([q, ...wrongOptions]);
+
+        container.innerHTML = `
+            <div class="quiz-container">
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" style="width: ${progress}%"></div>
+                </div>
+                <div class="quiz-score">
+                    Soalan ${quizState.currentIndex + 1} / ${quizState.questions.length} &nbsp;•&nbsp;
+                    Skor: <span>${quizState.score}</span>
+                </div>
+                <div class="quiz-card">
+                    <span class="quiz-emoji">${q.emoji}</span>
+                    <div class="quiz-question-label">Apakah dalam Bahasa Arab?</div>
+                    <div class="quiz-question">${q.bm}</div>
+                    <div class="quiz-rumi hidden" id="quiz-rumi-hint">${q.rumi}</div>
+                    <div class="quiz-options">
+                        ${options.map((opt, i) => `
+                            <button class="quiz-option" data-arab="${opt.arab}" data-correct="${opt.arab === q.arab}" id="quiz-opt-${i}"
+                                onclick="handleQuizAnswer(this, '${encodeURIComponent(q.arab)}')">
+                                ${opt.arab}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                    <button class="quiz-next-btn" id="quiz-next" onclick="nextQuestion()">Soalan Seterusnya ➜</button>
+                </div>
+            </div>
+        `;
+
+        quizState.answered = false;
+    }
+
+    function handleQuizAnswer(btn, correctArabEncoded) {
+        if (quizState.answered) return;
+        quizState.answered = true;
+
+        const correctArab = decodeURIComponent(correctArabEncoded);
+        const isCorrect = btn.dataset.correct === 'true';
+        const feedback = document.getElementById('quiz-feedback');
+        const q = quizState.questions[quizState.currentIndex];
+
+        const rumiHint = document.getElementById('quiz-rumi-hint');
+        if (rumiHint) rumiHint.classList.remove('hidden');
+
+        // Disable all options
+        document.querySelectorAll('.quiz-option').forEach(opt => {
+            opt.classList.add('disabled');
+            if (opt.dataset.arab === correctArab) {
+                opt.classList.add('show-correct');
+            }
+        });
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            quizState.score++;
+            feedback.className = 'quiz-feedback show correct';
+            feedback.textContent = '✅ Betul! Hebat! 🌟';
+            playSound('correct');
+            
+            // Play correct pronunciation after the ding sound
+            setTimeout(() => {
+                speakVocab(q.rumi);
+            }, 600);
+
+            // Track topic progress
+            if (!quizState.topicScores[q.topic]) quizState.topicScores[q.topic] = { correct: 0, total: 0 };
+            quizState.topicScores[q.topic].correct++;
+            quizState.topicScores[q.topic].total++;
+        } else {
+            btn.classList.add('wrong');
+            feedback.className = 'quiz-feedback show wrong';
+            feedback.textContent = `❌ Tak apa, jawapan betul: ${correctArab}`;
+            playSound('wrong');
+
+            if (!quizState.topicScores[q.topic]) quizState.topicScores[q.topic] = { correct: 0, total: 0 };
+            quizState.topicScores[q.topic].total++;
+        }
+
+        document.getElementById('quiz-next').classList.add('show');
+    }
+
+    function nextQuestion() {
+        quizState.currentIndex++;
+        renderQuizQuestion();
+    }
+
+    function renderQuizComplete() {
+        const container = document.getElementById('quiz-view');
+        const percent = Math.round((quizState.score / quizState.questions.length) * 100);
+
+        let message, bigEmoji;
+        if (percent >= 90) { message = "LUAR BIASA! Kamu memang champion! 🏆"; bigEmoji = "🌟"; }
+        else if (percent >= 70) { message = "Bagus sangat! Teruskan usaha! 💪"; bigEmoji = "😊"; }
+        else if (percent >= 50) { message = "Ok! Cuba lagi untuk score lebih tinggi! 📈"; bigEmoji = "👍"; }
+        else { message = "Jangan give up! Practice makes perfect! 💪"; bigEmoji = "🤗"; }
+
+        // Save progress
+        saveProgress(quizState.topicScores);
+        playSound('complete');
+
+        container.innerHTML = `
+            <div class="quiz-complete">
+                <span class="big-emoji">${bigEmoji}</span>
+                <h2>${message}</h2>
+                <div class="final-score">${quizState.score} / ${quizState.questions.length}</div>
+                <div class="final-label">${percent}% Betul</div>
+                <button class="quiz-restart-btn" onclick="startQuiz()">🔄 Cuba Lagi</button>
+            </div>
+        `;
+    }
+
+    // =============================================
+    // PROGRESS TRACKING
+    // =============================================
+    function loadProgress() {
+        try {
+            const saved = localStorage.getItem('kafa_darjah2_progress');
+            if (saved) return JSON.parse(saved);
+        } catch(e) {}
+        return {};
+    }
+
+    function saveProgress(newScores) {
+        try {
+            const existing = loadProgress();
+            Object.keys(newScores).forEach(topic => {
+                if (!existing[topic]) existing[topic] = { correct: 0, total: 0 };
+                existing[topic].correct += newScores[topic].correct;
+                existing[topic].total += newScores[topic].total;
+            });
+            localStorage.setItem('kafa_darjah2_progress', JSON.stringify(existing));
+        } catch(e) {}
+    }
+
+    function renderProgressView() {
+        const container = document.getElementById('progress-view');
+        const progress = loadProgress();
+
+        const topicColors = {
+            nombor: 'var(--color-nombor)',
+            warna: 'var(--color-warna)',
+            haiwan: 'var(--color-haiwan)',
+            sukan: 'var(--color-sukan)',
+            pakaian: 'var(--color-pakaian)',
+            sayur: 'var(--color-sayur)',
+            buah: 'var(--color-buah)',
+            makanan: 'var(--color-makanan)',
+        };
+
+        let totalCorrect = 0, totalAttempted = 0;
+
+        let cardsHtml = '';
+        Object.keys(VOCAB_DATA).forEach(key => {
+            const topic = VOCAB_DATA[key];
+            const p = progress[key] || { correct: 0, total: 0 };
+            const percent = p.total > 0 ? Math.round((p.correct / p.total) * 100) : 0;
+            totalCorrect += p.correct;
+            totalAttempted += p.total;
+
+            cardsHtml += `
+                <div class="progress-card">
+                    <span class="prog-emoji">${topic.emoji}</span>
+                    <div class="prog-info">
+                        <div class="prog-name">${topic.title}</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-value" style="width: ${percent}%; background: ${topicColors[key]}"></div>
+                        </div>
+                    </div>
+                    <div class="prog-percent" style="color: ${topicColors[key]}">${percent}%</div>
+                </div>
+            `;
+        });
+
+        const totalPercent = totalAttempted > 0 ? Math.round((totalCorrect / totalAttempted) * 100) : 0;
+
+        container.innerHTML = `
+            <div class="progress-container">
+                <div class="progress-total">
+                    <div style="font-size:14px; color:var(--text-light); margin-bottom:4px;">Keseluruhan</div>
+                    <div class="total-score">${totalPercent}%</div>
+                    <div style="font-size:14px; color:var(--text-light);">${totalCorrect} betul dari ${totalAttempted} soalan</div>
+                </div>
+                ${cardsHtml}
+                <button class="reset-btn" onclick="resetProgress()">🗑️ Reset Progress</button>
+            </div>
+        `;
+    }
+
+    function resetProgress() {
+        if (confirm('Confirm reset semua progress?')) {
+            localStorage.removeItem('kafa_darjah2_progress');
+            renderProgressView();
+        }
+    }
+
+    function speakVocab(rumiText) {
+        try {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+            
+            // Gunakan audio pra-rakaman berkualiti tinggi dari Google TTS
+            if (typeof AUDIO_DB !== 'undefined' && AUDIO_DB[rumiText]) {
+                const audio = new Audio(AUDIO_DB[rumiText]);
+                audio.play();
+                return;
+            }
+            
+            // Fallback: Jika tak jumpa audio pra-rakaman, guna enjin suara browser
+            let textToSpeak = rumiText;
+            
+            // Dictionary fonetik khas untuk perkataan bersabdu (shaddah) supaya dengung jelas & tak gagap
+            const fonetikKhas = {
+                "Burtuqaliyyun": "Bur tu qo li yun",
+                "Banafsajiyyun": "Ba naf sa ji yun",
+                "Ramadiyyun": "Ra ma di yun",
+                "Bunniyyun": "Bun ni yun",
+                "Wardiyyun": "War di yun",
+                "Sittatun": "Sit ta tun",
+                "Qittun": "Qit tun",
+                "Aruzzun": "A ruz zun",
+                "Dhurratun": "Dhur ro tun",
+                "Tuffahatun": "Tuf fa ha tun",
+                "Mi'atun": "Mi ah tun",
+                "Mi'atani": "Mi ah ta ni",
+                "Arba'atun": "Ar ba ah tun",
+                "Sab'atun": "Sab ah tun",
+                "Tis'atun": "Tis ah tun"
+            };
+
+            if (fonetikKhas[rumiText]) {
+                textToSpeak = fonetikKhas[rumiText];
+            } else {
+                // Peraturan fonetik umum
+                textToSpeak = textToSpeak.replace(/'/g, ' '); // Tukar koma atas jadi jarak (space) untuk bunyi hentian
+                textToSpeak = textToSpeak.replace(/qa/gi, 'qo');
+                textToSpeak = textToSpeak.replace(/yy/gi, 'y');
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'ms-MY'; 
+            utterance.rate = 0.7;  
+            window.speechSynthesis.speak(utterance);
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    // =============================================
+    // SOUND EFFECTS (Web Audio API)
+    // =============================================
+    let audioCtx = null;
+
+    function getAudioCtx() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return audioCtx;
+    }
+
+    function playSound(type) {
+        try {
+            const ctx = getAudioCtx();
+            const now = ctx.currentTime;
+
+            if (type === 'correct') {
+                // Happy ascending ding — two quick notes
+                [523.25, 659.25, 783.99].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.3, now + i * 0.12);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.3);
+                    osc.start(now + i * 0.12);
+                    osc.stop(now + i * 0.12 + 0.3);
+                });
+            } else if (type === 'wrong') {
+                // Gentle low buzz — not scary
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'triangle';
+                osc.frequency.value = 200;
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } else if (type === 'complete') {
+                // Victory fanfare — ascending melody
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.25, now + i * 0.15);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.15 + 0.5);
+                    osc.start(now + i * 0.15);
+                    osc.stop(now + i * 0.15 + 0.5);
+                });
+                // Final chord
+                [523.25, 659.25, 783.99].forEach(freq => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.15, now + 0.7);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+                    osc.start(now + 0.7);
+                    osc.stop(now + 1.5);
+                });
+            } else if (type === 'click') {
+                // Soft click
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.value = 800;
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            }
+        } catch(e) {
+            // Audio not supported — fail silently
+        }
+    }
+
+    // =============================================
+    // UTILITIES
+    // =============================================
+    function shuffleArray(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+    </script>
+
+    <!-- ============================================
+         MODALS
+         ============================================ -->
+    <!-- Quiz Summary Modal -->
+    <div id="quiz-summary-modal" class="modal hidden">
+        <div class="modal-content text-center">
+            <h2>🎉 Sesi Selesai!</h2>
+            <div class="score-display">Markah Anda: <span id="summary-score">0/15</span></div>
+            <div class="score-percent" id="summary-percent">0%</div>
+            <button class="nav-btn" onclick="closeQuizSummary()">Kembali ke Menu Utama</button>
+        </div>
+    </div>
+
+    <!-- Dashboard Modal -->
+    <div id="dashboard-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 800px; width: 95%;">
+            <span class="close-btn" onclick="closeDashboard()">&times;</span>
+            <h2>📊 Laporan Prestasi (Ibu Bapa)</h2>
+            <div class="dashboard-tabs">
+                <button class="dash-tab active" id="tab-dash-chart" onclick="switchDashTab('chart')">📈 Graf Ketepatan</button>
+                <button class="dash-tab" id="tab-dash-history" onclick="switchDashTab('history')">📜 Sejarah Rekod</button>
+            </div>
+            
+            <div id="dash-chart-view">
+                <div style="margin: 15px 0;">
+                    <label for="chart-filter"><strong>Penapis Modul: </strong></label>
+                    <select id="chart-filter" onchange="renderChart()" style="padding: 5px; border-radius: 5px;">
+                        <option value="all">Semua Topik</option>
+                        <option value="nombor">Nombor</option>
+                        <option value="warna">Warna</option>
+                        <option value="haiwan">Haiwan</option>
+                        <option value="sukan">Sukan</option>
+                        <option value="pakaian">Pakaian</option>
+                        <option value="sayur">Sayur</option>
+                        <option value="buah">Buah</option>
+                        <option value="makanan">Makanan</option>
+                    </select>
+                </div>
+                <canvas id="performanceChart"></canvas>
+            </div>
+
+            <div id="dash-history-view" class="hidden">
+                <div class="table-container">
+                    <table id="historyTable" class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Tarikh</th>
+                                <th>Modul</th>
+                                <th>Markah</th>
+                                <th>Peratus</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody"></tbody>
+                    </table>
+                </div>
+                <button class="nav-btn" style="background: var(--wrong); margin-top: 15px;" onclick="clearHistory()">🗑️ Padam Semua Rekod</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

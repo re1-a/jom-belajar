@@ -1,0 +1,510 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+:root {
+    /* Soft Pastel Colors - Dyslexia-Friendly */
+    --bg-cream: #FFF8E7;
+    --bg-card: #FFFFFF;
+    --text-main: #2C3E50;
+    --text-muted: #7F8C8D;
+
+    /* Island Accent Colors */
+    --island-kemahiran: #85C1E9;
+    --island-manusia: #F1948A;
+    --island-haiwan: #82E0AA;
+    --island-tumbuhan: #73C6B6;
+    --island-cahaya: #F7DC6F;
+    --island-elektrik: #BB8FCE;
+    --island-campuran: #F0B27A;
+    --island-bumi: #76D7C4;
+    --island-teknologi: #AEB6BF;
+
+    /* Interactive */
+    --btn-correct: #27AE60;
+    --btn-wrong-soft: #E67E22;
+    --btn-primary: #3498DB;
+    --btn-disabled: #D5DBDB;
+    --btn-locked: #BDC3C7;
+
+    /* Sizing */
+    --radius-large: 24px;
+    --radius-pill: 50px;
+    --touch-min: 56px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+    background-color: var(--bg-cream);
+    color: var(--text-main);
+    min-height: 100vh;
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+/* ==========================================
+   SCREENS
+   ========================================== */
+.screen { display: none; }
+.screen.active { display: flex; flex-direction: column; align-items: center; }
+
+/* ==========================================
+   TOP HUD (Streak + Progress)
+   ========================================== */
+.top-hud {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--bg-card);
+    border-radius: 0 0 var(--radius-large) var(--radius-large);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    margin-bottom: 16px;
+}
+
+.streak-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #E74C3C;
+    white-space: nowrap;
+}
+
+.progress-wrapper {
+    flex: 1;
+    margin: 0 16px;
+    background: #EAECEE;
+    border-radius: 10px;
+    height: 14px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #27AE60, #2ECC71);
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.6s ease-out;
+}
+
+/* ==========================================
+   MAP VIEW
+   ========================================== */
+.map-wrapper {
+    width: 100%;
+    max-width: 560px;
+    padding: 0 16px 30px;
+    text-align: center;
+}
+
+.map-title {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+}
+
+.map-subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* Path / Trail between islands */
+.trail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.trail-dot {
+    width: 6px;
+    height: 30px;
+    border-left: 3px dashed #BDC3C7;
+}
+
+/* Island Card */
+.island {
+    width: 100%;
+    background: var(--bg-card);
+    border-radius: var(--radius-large);
+    padding: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    border-left: 6px solid var(--accent, var(--btn-primary));
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.island:active {
+    transform: scale(0.97);
+}
+
+.island-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+.island-emoji {
+    font-size: 2.2rem;
+    min-width: 48px;
+    text-align: center;
+}
+
+.island-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+}
+
+.island-info p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.island-status {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 1.4rem;
+}
+
+.island.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.island.locked::after {
+    content: '🔒';
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 1.6rem;
+}
+
+.island.completed {
+    border-left-color: var(--btn-correct);
+}
+
+.island.completed::after {
+    content: '✅';
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 1.4rem;
+}
+
+/* ==========================================
+   BADGES SECTION
+   ========================================== */
+.badges-section {
+    width: 100%;
+    background: var(--bg-card);
+    border-radius: var(--radius-large);
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    text-align: center;
+}
+
+.badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    min-width: 64px;
+}
+
+.badge-item .emoji {
+    font-size: 2rem;
+    filter: grayscale(100%);
+    opacity: 0.4;
+    transition: all 0.3s;
+}
+
+.badge-item.unlocked .emoji {
+    filter: grayscale(0%);
+    opacity: 1;
+    animation: badgePop 0.4s ease;
+}
+
+@keyframes badgePop {
+    0% { transform: scale(0.5); }
+    60% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+/* ==========================================
+   QUIZ SCREEN
+   ========================================== */
+.quiz-wrapper {
+    width: 100%;
+    max-width: 560px;
+    padding: 0 16px 40px;
+    text-align: center;
+}
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--btn-primary);
+    cursor: pointer;
+    font-family: inherit;
+    padding: 8px 0;
+}
+
+.quiz-progress-text {
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.quiz-question-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-large);
+    padding: 28px 24px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.quiz-question-card .emoji-big {
+    font-size: 3.5rem;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.quiz-question-card .question-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+/* MCQ Options */
+.options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.option-btn {
+    width: 100%;
+    min-height: var(--touch-min);
+    padding: 14px 20px;
+    border: 3px solid #EAECEE;
+    border-radius: 16px;
+    background: var(--bg-card);
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: inherit;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+}
+
+.option-btn:active {
+    transform: scale(0.97);
+}
+
+.option-btn.correct {
+    border-color: var(--btn-correct);
+    background: #D5F5E3;
+    color: #1E8449;
+}
+
+.option-btn.wrong {
+    border-color: var(--btn-wrong-soft);
+    background: #FDEBD0;
+    color: #A04000;
+}
+
+.option-btn.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Feedback area */
+.quiz-feedback {
+    background: var(--bg-card);
+    border-radius: var(--radius-large);
+    padding: 24px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    margin-top: 16px;
+    display: none;
+}
+
+.quiz-feedback.visible { display: block; }
+
+.quiz-feedback .feedback-emoji {
+    font-size: 3rem;
+    margin-bottom: 8px;
+}
+
+.quiz-feedback .feedback-msg {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.quiz-feedback .explanation {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    background: #F8F9F9;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.btn-next {
+    width: 100%;
+    min-height: var(--touch-min);
+    padding: 14px;
+    background: var(--btn-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-pill);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+    transition: transform 0.15s;
+}
+
+.btn-next:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+}
+
+/* ==========================================
+   SUMMARY MODAL
+   ========================================== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-box {
+    background: var(--bg-card);
+    border-radius: var(--radius-large);
+    padding: 32px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: modalPop 0.3s ease;
+}
+
+@keyframes modalPop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.modal-box .score-big {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin: 16px 0;
+}
+
+.modal-box .score-big.great { color: var(--btn-correct); }
+.modal-box .score-big.ok { color: var(--btn-wrong-soft); }
+.modal-box .score-big.try-again { color: #E74C3C; }
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions .btn-next { width: 100%; }
+.modal-actions .btn-secondary {
+    width: 100%;
+    min-height: var(--touch-min);
+    padding: 14px;
+    background: #EAECEE;
+    color: var(--text-main);
+    border: none;
+    border-radius: var(--radius-pill);
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* ==========================================
+   FOOTER NAV
+   ========================================== */
+.footer-link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    color: var(--btn-primary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.version-text {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+@media (max-width: 400px) {
+    body { font-size: 16px; }
+    .island { padding: 16px; }
+    .quiz-question-card { padding: 20px 16px; }
+    .option-btn { padding: 12px 16px; font-size: 1rem; }
+}

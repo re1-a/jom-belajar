@@ -1,0 +1,10 @@
+# Secrets & Credentials
+.env
+*.pem
+*.key
+credentials.json
+secrets/
+
+# Node modules & OS generated
+node_modules/
+.DS_Store

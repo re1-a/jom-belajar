@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Utama Pembelajaran</title>
+    <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HL2PFGWTHM"></script>
@@ -594,14 +595,14 @@
                 <p>Silibus kebangsaan terkini</p>
             </div>
             <div class="cards-container" style="padding: 0;">
-                <a href="matematik-darjah2/index.html" class="card math">
+                <a href="modul_kuiz/matematik/index.html" class="card math">
                     <div class="card-icon">🔢</div>
                     <h2>Matematik</h2>
                     <p>Latihan interaktif Matematik Darjah 2 Jilid 1</p>
                     <span class="card-btn">Mula Belajar</span>
                 </a>
 
-                <a href="sains-darjah2/index.html" class="card sains">
+                <a href="modul_kuiz/sains/index.html" class="card sains">
                     <div class="card-icon">🦊</div>
                     <h2>Sains</h2>
                     <p>Kad nota interaktif &amp; kuiz Sains Darjah 2 bersama Fox</p>
@@ -617,21 +618,28 @@
                 <p>Silibus Jabatan Agama Islam Selangor (JAIS)</p>
             </div>
             <div class="cards-container" style="padding: 0;">
-                <a href="bahasa-arab.html" class="card arab">
+                
+                <a href="modul_kuiz/akhlak/akhlak.html" class="card" style="--accent: #2dd4bf;">
+                    <div class="card-icon">📚</div>
+                    <h2>Akhlak</h2>
+                    <p>Nota & kuiz Akhlak KAFA Darjah 2</p>
+                    <span class="card-btn">Mula Belajar</span>
+                </a>
+                <a href="modul_kuiz/bahasa_arab/bahasa_arab.html" class="card arab">
                     <div class="card-icon">🕌</div>
                     <h2>Bahasa Arab</h2>
                     <p>Nota &amp; kuiz Bahasa Arab KAFA Darjah 2</p>
                     <span class="card-btn">Mula Belajar</span>
                 </a>
 
-                <a href="tauhid.html" class="card tauhid">
+                <a href="modul_kuiz/tauhid/tauhid.html" class="card tauhid">
                     <div class="card-icon">📗</div>
                     <h2>Tauhid</h2>
                     <p>Nota &amp; kuiz Tauhid KAFA Darjah 2</p>
                     <span class="card-btn">Mula Belajar</span>
                 </a>
 
-                <a href="feqah.html" class="card feqah">
+                <a href="modul_kuiz/feqah/feqah.html" class="card feqah">
                     <div class="card-icon">📖</div>
                     <h2>Feqah</h2>
                     <p>Nota &amp; kuiz Feqah KAFA Darjah 2</p>
@@ -855,5 +863,6 @@
             }
         });
     </script>
+    <script>if('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js'); }</script>
 </body>
 </html>

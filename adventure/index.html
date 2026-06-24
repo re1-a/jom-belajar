@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sains Explorer - Peta Pengembaraan</title>
+    <link rel="stylesheet" href="css/dyslexia-theme.css">
+</head>
+<body>
+
+    <!-- ==========================================
+         SCREEN 1: MAP
+         ========================================== -->
+    <div id="screen-map" class="screen active">
+        <!-- Top HUD -->
+        <div class="top-hud">
+            <div class="streak-counter">🔥 <span id="streak-count">0</span></div>
+            <div class="progress-wrapper">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="map-wrapper">
+            <h1 class="map-title" id="map-title">🗺️ Sains Explorer</h1>
+            <p class="map-subtitle">Tekan pulau untuk mula misi!</p>
+
+            <!-- Trail of islands — injected by JS -->
+            <div class="trail" id="island-trail"></div>
+
+            <!-- Badges -->
+            <div class="badges-section">
+                <h3>🏅 Lencana Saya</h3>
+                <div class="badge-row" id="badge-row"></div>
+            </div>
+
+            <a href="../index.html" class="footer-link">⬅️ Kembali ke Menu Asal</a>
+            <div class="version-text">v1.0.0 (Sains Explorer)</div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SCREEN 2: QUIZ
+         ========================================== -->
+    <div id="screen-quiz" class="screen">
+        <div class="top-hud">
+            <div class="streak-counter">🔥 <span id="streak-count-quiz">0</span></div>
+            <div class="progress-wrapper">
+                <div class="progress-fill" id="progress-fill-quiz"></div>
+            </div>
+        </div>
+
+        <div class="quiz-wrapper">
+            <div class="quiz-header">
+                <button class="btn-back" onclick="goToMap()">⬅️ Kembali</button>
+                <span class="quiz-progress-text" id="quiz-progress">1 / 5</span>
+            </div>
+
+            <!-- Question Card -->
+            <div class="quiz-question-card" id="question-card">
+                <span class="emoji-big" id="q-emoji">🔬</span>
+                <p class="question-text" id="q-text">Soalan akan muncul di sini...</p>
+            </div>
+
+            <!-- Options -->
+            <div class="options-grid" id="options-grid"></div>
+
+            <!-- Feedback -->
+            <div class="quiz-feedback" id="quiz-feedback">
+                <div class="feedback-emoji" id="fb-emoji"></div>
+                <div class="feedback-msg" id="fb-msg"></div>
+                <div class="explanation" id="fb-explain"></div>
+                <button class="btn-next" id="btn-next" onclick="nextQuestion()">Seterusnya ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SUMMARY MODAL
+         ========================================== -->
+    <div class="modal-overlay" id="summary-modal">
+        <div class="modal-box">
+            <div style="font-size: 3rem;" id="summary-emoji">🎉</div>
+            <h2 id="summary-title">Tahniah!</h2>
+            <div class="score-big" id="summary-score">80%</div>
+            <p id="summary-msg" style="color: var(--text-muted);">Anda hebat!</p>
+            <div class="modal-actions">
+                <button class="btn-next" onclick="replayQuiz()">🔄 Cuba Lagi</button>
+                <button class="btn-secondary" onclick="goToMap()">🗺️ Kembali ke Peta</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SCRIPTS
+         ========================================== -->
+    <!-- Notes data from existing sains module -->
+    <script src="../sains-darjah2/notes_data.js"></script>
+    <!-- Engine -->
+    <script src="js/adventure_engine.js"></script>
+    <!-- App Logic -->
+    <script>
+        // ==========================================
+        // STATE
+        // ==========================================
+        let currentUnitId = '';
+        let quizData = [];
+        let quizIndex = 0;
+        let quizCorrect = 0;
+        let answered = false;
+
+        // ==========================================
+        // INIT
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = checkStreak();
+            renderMap(state);
+            renderBadges(state);
+            updateHUD(state);
+
+            // Hidden parent dashboard: tap title 5x
+            let tapCount = 0, tapTimer;
+            document.getElementById('map-title').addEventListener('click', () => {
+                tapCount++;
+                clearTimeout(tapTimer);
+                if (tapCount >= 5) {
+                    const pin = prompt('Masukkan PIN Ibu Bapa:');
+                    if (pin === '1234') window.location.href = 'parent-dashboard.html';
+                    else if (pin !== null) alert('PIN Salah.');
+                    tapCount = 0;
+                } else {
+                    tapTimer = setTimeout(() => tapCount = 0, 2000);
+                }
+            });
+        });
+
+        // ==========================================
+        // RENDER MAP
+        // ==========================================
+        function renderMap(state) {
+            const trail = document.getElementById('island-trail');
+            trail.innerHTML = '';
+
+            UNITS.forEach((unit, idx) => {
+                const status = getUnitStatus(unit.id);
+                const score = state.quizScores[unit.id];
+
+                let statusClass = status;
+                let scoreLabel = '';
+                if (score && score.best > 0) {
+                    scoreLabel = `Skor terbaik: ${score.best}%`;
+                }
+
+                const card = document.createElement('div');
+                card.className = `island ${statusClass}`;
+                card.style.setProperty('--accent', unit.color);
+                card.innerHTML = `
+                    <div class="island-header">
+                        <div class="island-emoji">${unit.emoji}</div>
+                        <div class="island-info">
+                            <h3>${unit.island}</h3>
+                            <p>${unit.name}${scoreLabel ? ' · ' + scoreLabel : ''}</p>
+                        </div>
+                    </div>
+                `;
+
+                if (status !== 'locked') {
+                    card.addEventListener('click', () => startQuiz(unit.id));
+                } else {
+                    card.addEventListener('click', () => {
+                        card.style.animation = 'none';
+                        card.offsetHeight; // reflow
+                        card.style.animation = 'shake 0.3s ease';
+                    });
+                }
+
+                trail.appendChild(card);
+
+                // Add trail connector except after last
+                if (idx < UNITS.length - 1) {
+                    const dot = document.createElement('div');
+                    dot.className = 'trail-dot';
+                    trail.appendChild(dot);
+                }
+            });
+        }
+
+        // ==========================================
+        // RENDER BADGES
+        // ==========================================
+        function renderBadges(state) {
+            const row = document.getElementById('badge-row');
+            row.innerHTML = '';
+            UNITS.forEach(unit => {
+                const unlocked = state.badges.includes(unit.badge);
+                const item = document.createElement('div');
+                item.className = `badge-item ${unlocked ? 'unlocked' : ''}`;
+                item.innerHTML = `<span class="emoji">${unit.badge}</span><span>${unit.name.split(' ')[0]}</span>`;
+                row.appendChild(item);
+            });
+        }
+
+        // ==========================================
+        // UPDATE HUD
+        // ==========================================
+        function updateHUD(state) {
+            document.querySelectorAll('[id^="streak-count"]').forEach(el => el.textContent = state.streak);
+            document.querySelectorAll('[id^="progress-fill"]').forEach(el => el.style.width = state.totalProgress + '%');
+        }
+
+        // ==========================================
+        // QUIZ FLOW
+        // ==========================================
+        function startQuiz(unitId) {
+            currentUnitId = unitId;
+            quizData = generateQuizFromNotes(unitId);
+            quizIndex = 0;
+            quizCorrect = 0;
+
+            if (quizData.length === 0) {
+                alert('Soalan untuk unit ini belum tersedia.');
+                return;
+            }
+
+            showScreen('screen-quiz');
+            const state = loadState();
+            updateHUD(state);
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (quizIndex >= quizData.length) {
+                endQuiz();
+                return;
+            }
+
+            answered = false;
+            const q = quizData[quizIndex];
+
+            document.getElementById('quiz-progress').textContent = `${quizIndex + 1} / ${quizData.length}`;
+            document.getElementById('q-emoji').textContent = q.emoji;
+            document.getElementById('q-text').textContent = q.question;
+
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.addEventListener('click', () => selectAnswer(i, btn));
+                grid.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback').classList.remove('visible');
+        }
+
+        function selectAnswer(index, btnEl) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizData[quizIndex];
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.classList.add('disabled'));
+
+            const fb = document.getElementById('quiz-feedback');
+            const isCorrect = index === q.correctIndex;
+
+            if (isCorrect) {
+                quizCorrect++;
+                btnEl.classList.add('correct');
+                document.getElementById('fb-emoji').textContent = '🎉';
+                document.getElementById('fb-msg').textContent = 'Betul! Hebat!';
+            } else {
+                btnEl.classList.add('wrong');
+                allBtns[q.correctIndex].classList.add('correct');
+                document.getElementById('fb-emoji').textContent = '💪';
+                document.getElementById('fb-msg').textContent = 'Tak mengapa, cuba lagi nanti!';
+            }
+
+            document.getElementById('fb-explain').textContent = q.explanation;
+
+            // Last question? Change button text
+            if (quizIndex >= quizData.length - 1) {
+                document.getElementById('btn-next').textContent = 'Lihat Keputusan 🏆';
+            } else {
+                document.getElementById('btn-next').textContent = 'Seterusnya ➡️';
+            }
+
+            fb.classList.add('visible');
+        }
+
+        function nextQuestion() {
+            quizIndex++;
+            showQuestion();
+        }
+
+        function endQuiz() {
+            const total = quizData.length;
+            const pct = Math.round((quizCorrect / total) * 100);
+
+            // Save score
+            saveQuizScore(currentUnitId, pct);
+
+            // If scored >= 60%, mark unit complete
+            if (pct >= 60) {
+                completeUnit(currentUnitId);
+            }
+
+            // Show modal
+            const modal = document.getElementById('summary-modal');
+            let emoji, title, msg, scoreClass;
+
+            if (pct >= 80) {
+                emoji = '🏆'; title = 'Luar Biasa!'; msg = 'Anda sangat cemerlang!'; scoreClass = 'great';
+            } else if (pct >= 60) {
+                emoji = '⭐'; title = 'Bagus!'; msg = 'Pulau berjaya ditakluk!'; scoreClass = 'ok';
+            } else {
+                emoji = '💪'; title = 'Teruskan Usaha!'; msg = 'Cuba lagi, pasti boleh!'; scoreClass = 'try-again';
+            }
+
+            document.getElementById('summary-emoji').textContent = emoji;
+            document.getElementById('summary-title').textContent = title;
+            document.getElementById('summary-score').textContent = pct + '%';
+            document.getElementById('summary-score').className = 'score-big ' + scoreClass;
+            document.getElementById('summary-msg').textContent = msg + ` (${quizCorrect}/${total} betul)`;
+
+            modal.classList.add('open');
+        }
+
+        function replayQuiz() {
+            document.getElementById('summary-modal').classList.remove('open');
+            startQuiz(currentUnitId);
+        }
+
+        // ==========================================
+        // NAVIGATION
+        // ==========================================
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function goToMap() {
+            document.getElementById('summary-modal').classList.remove('open');
+            const state = loadState();
+            renderMap(state);
+            renderBadges(state);
+            updateHUD(state);
+            showScreen('screen-map');
+        }
+    </script>
+
+    <style>
+        /* Shake animation for locked islands */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+    </style>
+</body>
+</html>

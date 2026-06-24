@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matematik Darjah 2 - Jom Belajar!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=5">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HL2PFGWTHM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HL2PFGWTHM');
+    </script>
+</head>
+<body>
+    <div class="background-elements">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <!-- MAIN MENU -->
+    <main id="main-menu" class="screen active">
+        <div class="top-bar" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="../../index.html" class="btn-dashboard" style="text-decoration:none; margin-right: auto;"><i class="fas fa-home"></i> <span class="menu-text">Menu Utama</span></a>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-dashboard btn-icon-only" onclick="openDashboard()" title="Laporan Prestasi"><i class="fas fa-chart-line"></i> <span>Laporan Prestasi</span></button>
+                <button id="btn-dark-mode" class="btn-dashboard btn-icon-only" onclick="toggleDarkMode()" title="Gelap/Terang"><i class="fas fa-moon"></i> <span>Gelap</span></button>
+            </div>
+            <span class="version-badge" style="margin-left: 10px; font-weight: bold; background: white; padding: 5px 10px; border-radius: 20px; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); color: #333;">v1.1.8</span>
+        </div>
+        <header>
+            <h1>Jom Belajar Matematik Darjah 2!</h1>
+            <p>Pilih permainan di bawah untuk mula</p>
+        </header>
+
+        <!-- Section: Silibus Jilid 1 -->
+        <div class="section-header exam-section">
+            <i class="fas fa-book-open"></i>
+            <span>Silibus Jilid 1</span>
+            <small>Pilih topik untuk mula berlatih</small>
+        </div>
+        <div class="menu-grid">
+            <button class="menu-card" data-id="ejaan" onclick="startGame('ejaan')">
+                <div class="card-icon"><i class="fas fa-font"></i></div>
+                <h2>Ejaan Nombor</h2>
+                <p>Angka kepada perkataan</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="nilai-tempat" onclick="startGame('nilai-tempat')">
+                <div class="card-icon"><i class="fas fa-layer-group"></i></div>
+                <h2>Nilai Tempat & Digit</h2>
+                <p>Kenali ratus, puluh, dan sa</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="cerakin" onclick="startGame('cerakin')">
+                <div class="card-icon"><i class="fas fa-puzzle-piece"></i></div>
+                <h2>Cerakin Nombor</h2>
+                <p>Pecahkan nombor</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="banding-nombor" onclick="startGame('banding-nombor')">
+                <div class="card-icon"><i class="fas fa-balance-scale"></i></div>
+                <h2>Banding Nombor</h2>
+                <p>Pilih nombor lebih besar/kecil</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="susun-nombor" onclick="startGame('susun-nombor')">
+                <div class="card-icon"><i class="fas fa-sort-numeric-up"></i></div>
+                <h2>Susun Nombor</h2>
+                <p>Menaik dan menurun</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="anggar" onclick="startGame('anggar')">
+                <div class="card-icon"><i class="fas fa-question-circle"></i></div>
+                <h2>Anggar Nombor</h2>
+                <p>Anggaran & penyelesaian masalah</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="bundar" onclick="startGame('bundar')">
+                <div class="card-icon"><i class="fas fa-mountain"></i></div>
+                <h2>Bundar Nombor</h2>
+                <p>Bundar kepada puluh & ratus</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="pola-nombor" onclick="startGame('pola-nombor')">
+                <div class="card-icon"><i class="fas fa-wave-square"></i></div>
+                <h2>Pola Nombor</h2>
+                <p>Lengkapkan rangkaian</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="tambah" onclick="startGame('tambah')">
+                <div class="card-icon"><i class="fas fa-plus"></i></div>
+                <h2>Tambah</h2>
+                <p>Tambah dalam lingkungan 1000</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="tolak" onclick="startGame('tolak')">
+                <div class="card-icon"><i class="fas fa-minus"></i></div>
+                <h2>Tolak</h2>
+                <p>Tolak dalam lingkungan 1000</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="darab" onclick="startGame('darab')">
+                <div class="card-icon"><i class="fas fa-times"></i></div>
+                <h2>Darab</h2>
+                <p>Cabaran sifir darab</p>
+                <div class="module-status"></div>
+            </button>
+
+            <button class="menu-card" data-id="bahagi" onclick="startGame('bahagi')">
+                <div class="card-icon"><i class="fas fa-divide"></i></div>
+                <h2>Bahagi</h2>
+                <p>Cabaran sifir bahagi</p>
+                <div class="module-status"></div>
+            </button>
+        </div>
+    </main>
+
+    <!-- GAME SCREEN -->
+    <main id="game-screen" class="screen">
+        <div class="top-bar">
+            <button class="btn-back" onclick="goHome()"><i class="fas fa-arrow-left"></i> Kembali</button>
+            <div class="score-board">
+                <i class="fas fa-star" style="color: #ffd700;"></i> <span id="score-display">0</span>
+            </div>
+        </div>
+
+        <div class="game-container">
+            <div id="game-header">
+                <h2 id="game-title">Tajuk Permainan</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p id="game-instruction">Arahan permainan</p>
+                    <p id="session-progress" style="font-weight: bold; color: var(--primary-color);">Soalan: 1/15</p>
+                </div>
+            </div>
+
+            <div id="game-area" class="game-area">
+                <!-- Dynamic content will be injected here -->
+            </div>
+
+            <div id="feedback-area" class="feedback-area hidden">
+                <div id="feedback-icon"></div>
+                <h3 id="feedback-message"></h3>
+                <div id="feedback-explanation" class="feedback-explanation hidden"></div>
+                <button id="next-btn" class="btn-primary" onclick="nextQuestion()">Seterusnya <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <!-- AUDIO -->
+    <audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"></audio>
+    <audio id="audio-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"></audio>
+
+    <script src="script.js"></script>
+
+    <!-- DASHBOARD MODAL -->
+    <div id="dashboard-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeDashboard()">&times;</span>
+            <h2>📊 Laporan Prestasi Aqil</h2>
+            
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" onclick="switchTab('chart')">Graf Harian</button>
+                <button class="tab-btn" onclick="switchTab('module')">Analisis Modul</button>
+                <button class="tab-btn" onclick="switchTab('history')">Sejarah Lengkap</button>
+            </div>
+            
+            <div id="tab-chart" class="tab-content active">
+                <div style="margin-bottom: 1rem;">
+                    <label for="module-filter" style="font-weight: bold;">Pilih Modul: </label>
+                    <select id="module-filter" onchange="renderChart()" style="padding: 0.5rem; border-radius: 5px;">
+                        <option value="all">Semua Modul</option>
+                        <option value="Nilai Tempat & Digit">Nilai Tempat & Digit</option>
+                        <option value="Banding Nombor">Banding Nombor</option>
+                        <option value="Bundar Nombor">Bundar Nombor</option>
+                        <option value="Cerakin Nombor">Cerakin Nombor</option>
+                        <option value="Ejaan Nombor">Ejaan Nombor</option>
+                        <option value="Darab & Bahagi">Darab & Bahagi</option>
+                        <option value="Susun Nombor">Susun Nombor</option>
+                        <option value="Pola Nombor">Pola Nombor</option>
+                        <option value="Tambah">Tambah</option>
+                        <option value="Tolak">Tolak</option>
+                        <option value="Anggar Nombor">Anggar Nombor</option>
+                    </select>
+                </div>
+                <canvas id="accuracyChart"></canvas>
+            </div>
+            
+            <div id="tab-module" class="tab-content hidden">
+                <canvas id="moduleChart"></canvas>
+            </div>
+            
+            <div id="tab-history" class="tab-content hidden">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Tarikh/Masa</th>
+                            <th>Modul</th>
+                            <th>Jawapan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-tbody">
+                        <!-- Data injected here -->
+                    </tbody>
+                </table>
+                <button class="btn-danger" style="margin-top: 1rem; padding: 0.5rem 1rem;" onclick="clearHistory()">Padam Semua Rekod</button>
+            </div>
+        </div>
+    </div>
+    <!-- SESSION SUMMARY MODAL -->
+    <div id="summary-modal" class="modal hidden">
+        <div class="modal-content" style="text-align: center; max-width: 400px;">
+            <h2>🎉 Sesi Selesai!</h2>
+            <h1 id="summary-score" style="font-size: 3rem; color: var(--primary-color); margin: 1rem 0;">12/15</h1>
+            <p id="summary-text" style="font-size: 1.2rem; margin-bottom: 2rem;">Syabas Aqil!</p>
+            <button class="btn-primary" onclick="closeSummaryAndHome()" style="width: 100%; margin-bottom: 1rem;">Kembali ke Menu</button>
+            <button class="btn-primary" style="background: var(--success-color); border-color: var(--success-color); width: 100%;" onclick="closeSummaryAndRestart()">Main Semula Modul Ini</button>
+        </div>
+    </div>
+</body>
+</html>

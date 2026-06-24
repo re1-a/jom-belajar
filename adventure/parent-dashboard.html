@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Papan Pemuka Ibu Bapa - Sains Explorer</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 16px;
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        /* Summary Cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .stat-card .label {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        /* Unit Breakdown */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 24px 0 12px;
+        }
+
+        .unit-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .unit-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            border-radius: 10px;
+            padding: 12px 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .unit-row .emoji { font-size: 1.4rem; }
+
+        .unit-row .info {
+            flex: 1;
+        }
+
+        .unit-row .info .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .unit-row .info .detail {
+            font-size: 0.78rem;
+            color: #7f8c8d;
+        }
+
+        .unit-row .score-badge {
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .score-badge.great { background: #d5f5e3; color: #1e8449; }
+        .score-badge.ok { background: #fdebd0; color: #a04000; }
+        .score-badge.weak { background: #fadbd8; color: #922b21; }
+        .score-badge.none { background: #eaecee; color: #7f8c8d; }
+
+        /* Chart */
+        .chart-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 28px;
+        }
+
+        .chart-box canvas {
+            max-height: 300px;
+        }
+
+        /* Danger button */
+        .btn-danger {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 500px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="btn-back">⬅️ Kembali ke Peta</a>
+        <h1>📊 Analisis Prestasi Sains — Aqil</h1>
+
+        <!-- Summary -->
+        <div class="stats-row" id="stats-row"></div>
+
+        <!-- Unit Breakdown -->
+        <div class="section-title">📋 Pecahan Mengikut Unit</div>
+        <div class="unit-grid" id="unit-grid"></div>
+
+        <!-- Chart -->
+        <div class="section-title">📈 Skor Terbaik Setiap Unit</div>
+        <div class="chart-box">
+            <canvas id="scoreChart"></canvas>
+        </div>
+
+        <button class="btn-danger" onclick="confirmClear()">🗑️ Padam Semua Rekod</button>
+    </div>
+
+    <script src="js/adventure_engine.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = getParentStats();
+
+            // Summary cards
+            const statsRow = document.getElementById('stats-row');
+            const completedCount = state.completedUnits.length;
+            const badgeCount = state.badges.length;
+
+            statsRow.innerHTML = `
+                <div class="stat-card"><div class="label">Streak Harian</div><div class="value">🔥 ${state.streak}</div></div>
+                <div class="stat-card"><div class="label">Kemajuan</div><div class="value">${state.totalProgress}%</div></div>
+                <div class="stat-card"><div class="label">Unit Selesai</div><div class="value">${completedCount} / ${UNITS.length}</div></div>
+                <div class="stat-card"><div class="label">Lencana</div><div class="value">${badgeCount}</div></div>
+            `;
+
+            // Unit breakdown
+            const unitGrid = document.getElementById('unit-grid');
+            const chartLabels = [];
+            const chartData = [];
+            const chartColors = [];
+
+            UNITS.forEach(unit => {
+                const score = state.quizScores[unit.id];
+                const completed = state.completedUnits.includes(unit.id);
+                let badgeClass = 'none', badgeText = 'Belum cuba';
+
+                if (score) {
+                    if (score.best >= 80) { badgeClass = 'great'; badgeText = score.best + '%'; }
+                    else if (score.best >= 60) { badgeClass = 'ok'; badgeText = score.best + '%'; }
+                    else { badgeClass = 'weak'; badgeText = score.best + '%'; }
+                }
+
+                const detail = score
+                    ? `${score.attempts} percubaan · ${completed ? '✅ Selesai' : '🔓 Belum selesai'}`
+                    : 'Belum dicuba';
+
+                unitGrid.innerHTML += `
+                    <div class="unit-row">
+                        <span class="emoji">${unit.emoji}</span>
+                        <div class="info">
+                            <div class="name">${unit.name}</div>
+                            <div class="detail">${detail}</div>
+                        </div>
+                        <span class="score-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                `;
+
+                chartLabels.push(unit.name.length > 12 ? unit.name.substring(0, 12) + '…' : unit.name);
+                chartData.push(score ? score.best : 0);
+
+                if (score && score.best < 60) chartColors.push('rgba(231, 76, 60, 0.7)');
+                else if (score && score.best < 80) chartColors.push('rgba(230, 126, 34, 0.7)');
+                else if (score) chartColors.push('rgba(39, 174, 96, 0.7)');
+                else chartColors.push('rgba(189, 195, 199, 0.5)');
+            });
+
+            // Chart
+            new Chart(document.getElementById('scoreChart'), {
+                type: 'bar',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Skor Terbaik (%)',
+                        data: chartData,
+                        backgroundColor: chartColors,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, ticks: { stepSize: 20 } },
+                        x: { ticks: { font: { size: 10 } } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        });
+
+        function confirmClear() {
+            if (confirm('Padam semua rekod? Ini tidak boleh dikembalikan.')) {
+                clearAllData();
+            }
+        }
+    </script>
+</body>
+</html>
